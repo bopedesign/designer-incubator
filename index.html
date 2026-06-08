@@ -415,19 +415,32 @@
 
 </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
-  let pdfBase64 = null;
+  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+
+  let extractedPdfText = null;
   let generatedCards = [];
 
-  document.getElementById('pdfInput').addEventListener('change', function(e) {
+  document.getElementById('pdfInput').addEventListener('change', async function(e) {
     const file = e.target.files[0];
     if (!file) return;
-    document.getElementById('fileName').textContent = file.name;
-    const reader = new FileReader();
-    reader.onload = function(ev) {
-      pdfBase64 = ev.target.result.split(',')[1];
-    };
-    reader.readAsDataURL(file);
+    document.getElementById('fileName').textContent = file.name + ' — extracting text...';
+    try {
+      const arrayBuffer = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      let fullText = '';
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const content = await page.getTextContent();
+        fullText += content.items.map(function(item) { return item.str; }).join(' ') + '\n';
+      }
+      extractedPdfText = fullText.trim();
+      document.getElementById('fileName').textContent = file.name + ' (' + pdf.numPages + ' pages extracted)';
+    } catch(err) {
+      document.getElementById('fileName').textContent = 'Error reading PDF — ' + err.message;
+      extractedPdfText = null;
+    }
   });
 
   function setTab(cardIndex, tabName) {
@@ -474,7 +487,7 @@
     const errEl = document.getElementById('errorMsg');
 
     if (!apiKey) { alert('Please enter your API key.'); return; }
-    if (!briefText && !pdfBase64) { alert('Please enter a brief or upload a PDF.'); return; }
+    if (!briefText && !extractedPdfText) { alert('Please enter a brief or upload a PDF.'); return; }
 
     document.getElementById('generateBtn').disabled = true;
     document.getElementById('status').classList.remove('hidden');
@@ -485,12 +498,10 @@
 
     const systemPrompt = 'You are a brand strategy and design hypothesis expert. Given a client brief, generate exactly 5 distinct design hypotheses. Each hypothesis should represent a genuinely different strategic bet on what the brand\'s core positioning and design direction should be.\n\nReturn ONLY valid JSON with this exact structure, no markdown, no preamble:\n{\n  "hypotheses": [\n    {\n      "title": "Short evocative title",\n      "tag": "2-word descriptor",\n      "hypothesis": "The core design hypothesis — what this bet is and what it would look like if true.",\n      "why": "The strategic rationale — why this direction, what market insight drives it, what competitor gap it exploits.",\n      "measurements": "How you would know if this bet is working — specific design quality criteria and success signals."\n    }\n  ]\n}';
 
-    const userContent = pdfBase64
-      ? [
-          { type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: pdfBase64 } },
-          { type: 'text', text: briefText ? 'Additional context: ' + briefText + '\n\nGenerate 5 design hypotheses from this brief.' : 'Generate 5 design hypotheses from this brief.' }
-        ]
-      : briefText;
+    let combinedText = '';
+    if (extractedPdfText) combinedText += extractedPdfText + '\n\n';
+    if (briefText) combinedText += briefText;
+    const userContent = 'Generate 5 design hypotheses from this brief:\n\n' + combinedText;
 
     try {
       const response = await fetch('/api/generate', {
