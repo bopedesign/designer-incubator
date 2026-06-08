@@ -21,12 +21,11 @@
   }
 
   h1 {
-    font-size: 13px;
+    font-size: 16px;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: #6b6560;
+    color: #c8c4bc;
     margin-bottom: 48px;
-    font-family: 'Georgia', serif;
     font-weight: normal;
   }
 
@@ -36,20 +35,20 @@
 
   label {
     display: block;
-    font-size: 11px;
-    letter-spacing: 0.15em;
+    font-size: 14px;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: #6b6560;
+    color: #c8c4bc;
     margin-bottom: 10px;
   }
 
   textarea {
     width: 100%;
     background: #1a1a1a;
-    border: 1px solid #2a2a2a;
+    border: 1px solid #3a3a3a;
     color: #e8e4dc;
     font-family: 'Georgia', serif;
-    font-size: 15px;
+    font-size: 16px;
     line-height: 1.7;
     padding: 16px;
     resize: vertical;
@@ -58,7 +57,9 @@
     transition: border-color 0.2s;
   }
 
-  textarea:focus { border-color: #4a4540; }
+  textarea:focus { border-color: #6a6560; }
+
+  textarea::placeholder { color: #5a5a5a; }
 
   .file-row {
     display: flex;
@@ -70,22 +71,22 @@
   input[type="file"] { display: none; }
 
   .file-label {
-    font-size: 11px;
-    letter-spacing: 0.15em;
+    font-size: 14px;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: #6b6560;
-    border: 1px solid #2a2a2a;
-    padding: 10px 20px;
+    color: #c8c4bc;
+    border: 1px solid #3a3a3a;
+    padding: 12px 20px;
     cursor: pointer;
     border-radius: 2px;
     transition: border-color 0.2s, color 0.2s;
   }
 
-  .file-label:hover { border-color: #4a4540; color: #e8e4dc; }
+  .file-label:hover { border-color: #6a6560; color: #e8e4dc; }
 
   .file-name {
-    font-size: 13px;
-    color: #4a4540;
+    font-size: 15px;
+    color: #a8a49c;
   }
 
   .api-row {
@@ -100,25 +101,25 @@
   input[type="password"] {
     width: 100%;
     background: #1a1a1a;
-    border: 1px solid #2a2a2a;
+    border: 1px solid #3a3a3a;
     color: #e8e4dc;
     font-family: 'Georgia', serif;
-    font-size: 15px;
-    padding: 12px 16px;
+    font-size: 16px;
+    padding: 13px 16px;
     outline: none;
     border-radius: 2px;
     transition: border-color 0.2s;
   }
 
-  input[type="password"]:focus { border-color: #4a4540; }
+  input[type="password"]:focus { border-color: #6a6560; }
 
   .btn-primary {
     background: #e8e4dc;
     color: #0f0f0f;
     border: none;
     font-family: 'Georgia', serif;
-    font-size: 11px;
-    letter-spacing: 0.2em;
+    font-size: 14px;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
     padding: 14px 32px;
     cursor: pointer;
@@ -128,31 +129,37 @@
   }
 
   .btn-primary:hover { background: #ffffff; }
-  .btn-primary:disabled { background: #2a2a2a; color: #4a4540; cursor: not-allowed; }
+  .btn-primary:disabled { background: #2a2a2a; color: #5a5a5a; cursor: not-allowed; }
 
   .btn-secondary {
     background: transparent;
     color: #e8e4dc;
-    border: 1px solid #2a2a2a;
+    border: 1px solid #3a3a3a;
     font-family: 'Georgia', serif;
-    font-size: 11px;
-    letter-spacing: 0.2em;
+    font-size: 14px;
+    letter-spacing: 0.15em;
     text-transform: uppercase;
-    padding: 12px 28px;
+    padding: 13px 28px;
     cursor: pointer;
     border-radius: 2px;
     transition: border-color 0.2s;
     white-space: nowrap;
   }
 
-  .btn-secondary:hover { border-color: #4a4540; }
-  .btn-secondary:disabled { color: #4a4540; cursor: not-allowed; }
+  .btn-secondary:hover { border-color: #6a6560; }
+  .btn-secondary:disabled { color: #5a5a5a; cursor: not-allowed; }
 
   .status {
-    font-size: 13px;
-    color: #6b6560;
+    font-size: 15px;
+    color: #a8a49c;
     margin-bottom: 40px;
     font-style: italic;
+  }
+
+  .error {
+    font-size: 15px;
+    color: #d87060;
+    margin-bottom: 40px;
   }
 
   .cards-grid {
@@ -178,23 +185,23 @@
   }
 
   .card-number {
-    font-size: 11px;
-    letter-spacing: 0.15em;
-    color: #4a4540;
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    color: #a8a49c;
     flex-shrink: 0;
   }
 
   .card-title {
-    font-size: 17px;
+    font-size: 18px;
     color: #e8e4dc;
     font-weight: normal;
   }
 
   .card-subtitle {
-    font-size: 11px;
-    letter-spacing: 0.12em;
+    font-size: 13px;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: #4a4540;
+    color: #a8a49c;
     flex-shrink: 0;
   }
 
@@ -204,26 +211,26 @@
   }
 
   .tab {
-    font-size: 11px;
-    letter-spacing: 0.12em;
+    font-size: 14px;
+    letter-spacing: 0.1em;
     text-transform: uppercase;
-    color: #4a4540;
-    padding: 12px 20px;
+    color: #a8a49c;
+    padding: 13px 20px;
     cursor: pointer;
     border: none;
     background: transparent;
-    border-bottom: 1px solid transparent;
+    border-bottom: 2px solid transparent;
     margin-bottom: -1px;
     transition: color 0.15s;
     font-family: 'Georgia', serif;
   }
 
-  .tab:hover { color: #a8a49c; }
+  .tab:hover { color: #c8c4bc; }
   .tab.active { color: #e8e4dc; border-bottom-color: #e8e4dc; }
 
   .tab-content {
     padding: 24px;
-    font-size: 15px;
+    font-size: 16px;
     line-height: 1.8;
     color: #c8c4bc;
     display: none;
@@ -242,17 +249,17 @@
   }
 
   .review-section-header h2 {
-    font-size: 13px;
+    font-size: 16px;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: #6b6560;
+    color: #c8c4bc;
     font-weight: normal;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
   }
 
   .review-section-header p {
-    font-size: 14px;
-    color: #4a4540;
+    font-size: 15px;
+    color: #a8a49c;
     line-height: 1.6;
   }
 
@@ -277,10 +284,10 @@
   }
 
   .ranking-result h3 {
-    font-size: 11px;
+    font-size: 14px;
     letter-spacing: 0.2em;
     text-transform: uppercase;
-    color: #6b6560;
+    color: #c8c4bc;
     font-weight: normal;
     margin-bottom: 24px;
   }
@@ -294,48 +301,48 @@
     display: flex;
     align-items: baseline;
     gap: 16px;
-    padding: 14px 0;
+    padding: 16px 0;
     border-bottom: 1px solid #2a2a2a;
   }
 
   .rank-item:last-child { border-bottom: none; }
 
   .rank-num {
-    font-size: 11px;
+    font-size: 14px;
     letter-spacing: 0.1em;
-    color: #4a4540;
-    width: 20px;
+    color: #a8a49c;
+    width: 24px;
     flex-shrink: 0;
   }
 
   .rank-title {
-    font-size: 16px;
+    font-size: 17px;
     color: #e8e4dc;
   }
 
   .rank-tag {
-    font-size: 11px;
-    letter-spacing: 0.1em;
+    font-size: 13px;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #4a4540;
+    color: #a8a49c;
     margin-left: auto;
     flex-shrink: 0;
   }
 
   .rank-reason {
-    font-size: 14px;
-    line-height: 1.7;
-    color: #6b6560;
+    font-size: 15px;
+    line-height: 1.8;
+    color: #a8a49c;
     margin-top: 24px;
     padding-top: 24px;
     border-top: 1px solid #2a2a2a;
   }
 
   .rank-reason h4 {
-    font-size: 11px;
+    font-size: 14px;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: #4a4540;
+    color: #c8c4bc;
     font-weight: normal;
     margin-bottom: 16px;
   }
@@ -349,7 +356,7 @@
   <h1>Designer Hypothesis Incubator</h1>
 
   <div class="input-section">
-    <label>Client Brief</label>
+    <label for="briefText">Client Brief</label>
     <textarea id="briefText" rows="10" placeholder="Paste your client brief here…"></textarea>
   </div>
 
@@ -361,13 +368,14 @@
 
   <div class="api-row">
     <div class="input-section">
-      <label>API Key</label>
+      <label for="apiKey">API Key</label>
       <input type="password" id="apiKey" placeholder="sk-ant-…">
     </div>
     <button class="btn-primary" id="generateBtn" onclick="generateHypotheses()">Generate Hypotheses</button>
   </div>
 
   <div class="status hidden" id="status">Generating hypotheses…</div>
+  <div class="error hidden" id="errorMsg"></div>
 
   <div class="cards-grid hidden" id="cardsGrid"></div>
 
@@ -381,11 +389,11 @@
 
     <div class="review-fields">
       <div class="input-section">
-        <label>Client Reviews</label>
+        <label for="clientReviews">Client Reviews</label>
         <textarea id="clientReviews" rows="12" placeholder="Paste your client's Google reviews here…"></textarea>
       </div>
       <div class="input-section">
-        <label>Competitor Reviews</label>
+        <label for="competitorReviews">Competitor Reviews</label>
         <textarea id="competitorReviews" rows="12" placeholder="Paste competitor Google reviews here…"></textarea>
       </div>
     </div>
@@ -393,6 +401,7 @@
     <button class="btn-secondary" id="rankBtn" onclick="rankHypotheses()">Rank the Bets</button>
 
     <div class="status hidden" id="rankStatus">Analyzing reviews…</div>
+    <div class="error hidden" id="rankErrorMsg"></div>
 
     <div class="ranking-result hidden" id="rankingResult">
       <h3>Ranked Bets</h3>
@@ -425,8 +434,8 @@
     const card = document.querySelectorAll('.card')[cardIndex];
     card.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
     card.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-    card.querySelector(`.tab[data-tab="${tabName}"]`).classList.add('active');
-    card.querySelector(`.tab-content[data-tab="${tabName}"]`).classList.add('active');
+    card.querySelector('.tab[data-tab="' + tabName + '"]').classList.add('active');
+    card.querySelector('.tab-content[data-tab="' + tabName + '"]').classList.add('active');
   }
 
   function renderCards(cards) {
@@ -434,24 +443,23 @@
     const grid = document.getElementById('cardsGrid');
     grid.innerHTML = '';
 
-    cards.forEach((card, i) => {
+    cards.forEach(function(card, i) {
       const el = document.createElement('div');
       el.className = 'card';
-      el.innerHTML = `
-        <div class="card-header">
-          <span class="card-number">${String(i + 1).padStart(2, '0')}</span>
-          <span class="card-title">${card.title}</span>
-          <span class="card-subtitle">${card.tag || ''}</span>
-        </div>
-        <div class="tab-bar">
-          <button class="tab active" data-tab="hypothesis" onclick="setTab(${i},'hypothesis')">Hypothesis</button>
-          <button class="tab" data-tab="why" onclick="setTab(${i},'why')">Why</button>
-          <button class="tab" data-tab="measurements" onclick="setTab(${i},'measurements')">Measurements</button>
-        </div>
-        <div class="tab-content active" data-tab="hypothesis">${card.hypothesis}</div>
-        <div class="tab-content" data-tab="why">${card.why}</div>
-        <div class="tab-content" data-tab="measurements">${card.measurements}</div>
-      `;
+      el.innerHTML =
+        '<div class="card-header">' +
+          '<span class="card-number">' + String(i + 1).padStart(2, '0') + '</span>' +
+          '<span class="card-title">' + card.title + '</span>' +
+          '<span class="card-subtitle">' + (card.tag || '') + '</span>' +
+        '</div>' +
+        '<div class="tab-bar">' +
+          '<button class="tab active" data-tab="hypothesis" onclick="setTab(' + i + ',\'hypothesis\')">Hypothesis</button>' +
+          '<button class="tab" data-tab="why" onclick="setTab(' + i + ',\'why\')">Why</button>' +
+          '<button class="tab" data-tab="measurements" onclick="setTab(' + i + ',\'measurements\')">Measurements</button>' +
+        '</div>' +
+        '<div class="tab-content active" data-tab="hypothesis">' + card.hypothesis + '</div>' +
+        '<div class="tab-content" data-tab="why">' + card.why + '</div>' +
+        '<div class="tab-content" data-tab="measurements">' + card.measurements + '</div>';
       grid.appendChild(el);
     });
 
@@ -463,35 +471,24 @@
   async function generateHypotheses() {
     const apiKey = document.getElementById('apiKey').value.trim();
     const briefText = document.getElementById('briefText').value.trim();
+    const errEl = document.getElementById('errorMsg');
 
     if (!apiKey) { alert('Please enter your API key.'); return; }
     if (!briefText && !pdfBase64) { alert('Please enter a brief or upload a PDF.'); return; }
 
     document.getElementById('generateBtn').disabled = true;
     document.getElementById('status').classList.remove('hidden');
+    errEl.classList.add('hidden');
     document.getElementById('cardsGrid').classList.add('hidden');
     document.getElementById('reviewDivider').classList.add('hidden');
     document.getElementById('reviewSection').classList.add('hidden');
 
-    const systemPrompt = `You are a brand strategy and design hypothesis expert. Given a client brief, generate exactly 5 distinct design hypotheses. Each hypothesis should represent a genuinely different strategic bet on what the brand's core positioning and design direction should be.
-
-Return ONLY valid JSON with this exact structure, no markdown, no preamble:
-{
-  "hypotheses": [
-    {
-      "title": "Short evocative title",
-      "tag": "2-word descriptor",
-      "hypothesis": "The core design hypothesis — what this bet is and what it would look like if true.",
-      "why": "The strategic rationale — why this direction, what market insight drives it, what competitor gap it exploits.",
-      "measurements": "How you would know if this bet is working — specific design quality criteria and success signals."
-    }
-  ]
-}`;
+    const systemPrompt = 'You are a brand strategy and design hypothesis expert. Given a client brief, generate exactly 5 distinct design hypotheses. Each hypothesis should represent a genuinely different strategic bet on what the brand\'s core positioning and design direction should be.\n\nReturn ONLY valid JSON with this exact structure, no markdown, no preamble:\n{\n  "hypotheses": [\n    {\n      "title": "Short evocative title",\n      "tag": "2-word descriptor",\n      "hypothesis": "The core design hypothesis — what this bet is and what it would look like if true.",\n      "why": "The strategic rationale — why this direction, what market insight drives it, what competitor gap it exploits.",\n      "measurements": "How you would know if this bet is working — specific design quality criteria and success signals."\n    }\n  ]\n}';
 
     const userContent = pdfBase64
       ? [
           { type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: pdfBase64 } },
-          { type: 'text', text: briefText ? `Additional context: ${briefText}\n\nGenerate 5 design hypotheses from this brief.` : 'Generate 5 design hypotheses from this brief.' }
+          { type: 'text', text: briefText ? 'Additional context: ' + briefText + '\n\nGenerate 5 design hypotheses from this brief.' : 'Generate 5 design hypotheses from this brief.' }
         ]
       : briefText;
 
@@ -500,22 +497,33 @@ Return ONLY valid JSON with this exact structure, no markdown, no preamble:
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey },
         body: JSON.stringify({
-          model: 'claude-haiku-4-5',
+          model: 'claude-haiku-4-5-20251001',
           max_tokens: 3000,
           system: systemPrompt,
           messages: [{ role: 'user', content: userContent }]
         })
       });
 
-      const data = await response.json();
-      const text = data.content?.[0]?.text || '';
+      const raw = await response.text();
+      let data;
+      try {
+        data = JSON.parse(raw);
+      } catch(e) {
+        throw new Error('API returned: ' + raw.substring(0, 200));
+      }
+
+      if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
+
+      const text = data.content && data.content[0] && data.content[0].text ? data.content[0].text : '';
       const clean = text.replace(/```json|```/g, '').trim();
       const parsed = JSON.parse(clean);
 
       renderCards(parsed.hypotheses);
       document.getElementById('status').classList.add('hidden');
     } catch (err) {
-      document.getElementById('status').textContent = 'Error: ' + err.message;
+      document.getElementById('status').classList.add('hidden');
+      errEl.textContent = 'Error: ' + err.message;
+      errEl.classList.remove('hidden');
     }
 
     document.getElementById('generateBtn').disabled = false;
@@ -525,6 +533,7 @@ Return ONLY valid JSON with this exact structure, no markdown, no preamble:
     const apiKey = document.getElementById('apiKey').value.trim();
     const clientReviews = document.getElementById('clientReviews').value.trim();
     const competitorReviews = document.getElementById('competitorReviews').value.trim();
+    const rankErrEl = document.getElementById('rankErrorMsg');
 
     if (!clientReviews && !competitorReviews) {
       alert('Please paste at least one set of reviews.');
@@ -538,68 +547,52 @@ Return ONLY valid JSON with this exact structure, no markdown, no preamble:
 
     document.getElementById('rankBtn').disabled = true;
     document.getElementById('rankStatus').classList.remove('hidden');
+    rankErrEl.classList.add('hidden');
     document.getElementById('rankingResult').classList.add('hidden');
 
-    const cardSummaries = generatedCards.map((c, i) =>
-      `Bet ${i + 1}: "${c.title}" — ${c.hypothesis}`
-    ).join('\n\n');
+    const cardSummaries = generatedCards.map(function(c, i) {
+      return 'Bet ' + (i + 1) + ': "' + c.title + '" — ' + c.hypothesis;
+    }).join('\n\n');
 
-    const systemPrompt = `You are a brand strategist analyzing Google reviews to determine which strategic bet is most strongly supported by real customer voice.
+    const systemPrompt = 'You are a brand strategist analyzing Google reviews to determine which strategic bet is most strongly supported by real customer voice.\n\nYou will receive:\n1. Five hypothesis bets from a Designer Hypothesis Incubator\n2. Reviews from the client\'s own Google Business Profile\n3. Reviews from competitor Google Business Profiles\n\nYour job is to analyze the contrast between client and competitor reviews to determine which bets are most grounded in real market reality versus which are based on wishful thinking.\n\nLook for:\n- What customers consistently praise about the client that competitors don\'t offer\n- What competitors are missing or getting criticized for, even subtly\n- What emotional language customers use — not just what they say but how they say it\n- Gaps between what the client thinks their differentiator is and what customers actually value\n\nReturn ONLY valid JSON, no markdown, no preamble:\n{\n  "ranked": [\n    { "rank": 1, "title": "exact title of bet", "signal": "brief 3-5 word signal" },\n    { "rank": 2, "title": "exact title of bet", "signal": "brief 3-5 word signal" },\n    { "rank": 3, "title": "exact title of bet", "signal": "brief 3-5 word signal" },\n    { "rank": 4, "title": "exact title of bet", "signal": "brief 3-5 word signal" },\n    { "rank": 5, "title": "exact title of bet", "signal": "brief 3-5 word signal" }\n  ],\n  "reasoning": "2-3 paragraphs explaining what the reviews revealed, what contrast emerged between client and competitor language, and why the top-ranked bet is the strongest strategic direction."\n}';
 
-You will receive:
-1. Five hypothesis bets from a Designer Hypothesis Incubator
-2. Reviews from the client's own Google Business Profile
-3. Reviews from competitor Google Business Profiles
-
-Your job is to analyze the contrast between client and competitor reviews to determine which bets are most grounded in real market reality versus which are based on wishful thinking.
-
-Look for:
-- What customers consistently praise or notice about the client that competitors don't offer
-- What competitors are missing or getting criticized for (even subtly)
-- What emotional language customers use — not just what they say but how they say it
-- Gaps between what the client thinks their differentiator is and what customers actually value
-
-Return ONLY valid JSON, no markdown, no preamble:
-{
-  "ranked": [
-    { "rank": 1, "title": "exact title of bet", "signal": "brief 3-5 word signal" },
-    { "rank": 2, "title": "exact title of bet", "signal": "brief 3-5 word signal" },
-    { "rank": 3, "title": "exact title of bet", "signal": "brief 3-5 word signal" },
-    { "rank": 4, "title": "exact title of bet", "signal": "brief 3-5 word signal" },
-    { "rank": 5, "title": "exact title of bet", "signal": "brief 3-5 word signal" }
-  ],
-  "reasoning": "2-3 paragraphs explaining what the reviews revealed, what contrast emerged between client and competitor language, and why the top-ranked bet is the strongest strategic direction."
-}`;
-
-    const userMessage = `Here are the five hypothesis bets:\n\n${cardSummaries}\n\n---\n\nClient Reviews:\n${clientReviews || 'None provided'}\n\n---\n\nCompetitor Reviews:\n${competitorReviews || 'None provided'}\n\nRank the five bets based on what the reviews reveal.`;
+    const userMessage = 'Here are the five hypothesis bets:\n\n' + cardSummaries + '\n\n---\n\nClient Reviews:\n' + (clientReviews || 'None provided') + '\n\n---\n\nCompetitor Reviews:\n' + (competitorReviews || 'None provided') + '\n\nRank the five bets based on what the reviews reveal.';
 
     try {
       const response = await fetch('/api/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey },
         body: JSON.stringify({
-          model: 'claude-haiku-4-5',
+          model: 'claude-haiku-4-5-20251001',
           max_tokens: 1500,
           system: systemPrompt,
           messages: [{ role: 'user', content: userMessage }]
         })
       });
 
-      const data = await response.json();
-      const text = data.content?.[0]?.text || '';
+      const raw = await response.text();
+      let data;
+      try {
+        data = JSON.parse(raw);
+      } catch(e) {
+        throw new Error('API returned: ' + raw.substring(0, 200));
+      }
+
+      if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
+
+      const text = data.content && data.content[0] && data.content[0].text ? data.content[0].text : '';
       const clean = text.replace(/```json|```/g, '').trim();
       const parsed = JSON.parse(clean);
 
       const list = document.getElementById('rankList');
       list.innerHTML = '';
-      parsed.ranked.forEach(item => {
+      parsed.ranked.forEach(function(item) {
         const li = document.createElement('li');
         li.className = 'rank-item';
-        li.innerHTML = `
-          <span class="rank-num">${item.rank}</span>
-          <span class="rank-title">${item.title}</span>
-          <span class="rank-tag">${item.signal}</span>
-        `;
+        li.innerHTML =
+          '<span class="rank-num">' + item.rank + '</span>' +
+          '<span class="rank-title">' + item.title + '</span>' +
+          '<span class="rank-tag">' + item.signal + '</span>';
         list.appendChild(li);
       });
 
@@ -607,7 +600,9 @@ Return ONLY valid JSON, no markdown, no preamble:
       document.getElementById('rankingResult').classList.remove('hidden');
       document.getElementById('rankStatus').classList.add('hidden');
     } catch (err) {
-      document.getElementById('rankStatus').textContent = 'Error: ' + err.message;
+      document.getElementById('rankStatus').classList.add('hidden');
+      rankErrEl.textContent = 'Error: ' + err.message;
+      rankErrEl.classList.remove('hidden');
     }
 
     document.getElementById('rankBtn').disabled = false;
