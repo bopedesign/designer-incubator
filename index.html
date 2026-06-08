@@ -15,10 +15,7 @@
     padding: 48px 24px;
   }
 
-  .container {
-    max-width: 900px;
-    margin: 0 auto;
-  }
+  .container { max-width: 900px; margin: 0 auto; }
 
   h1 {
     font-size: 16px;
@@ -29,9 +26,22 @@
     font-weight: normal;
   }
 
-  .input-section {
-    margin-bottom: 40px;
+  .section-label {
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #c8c4bc;
+    font-weight: normal;
+    margin-bottom: 6px;
   }
+
+  .section-sub {
+    font-size: 14px;
+    color: #a8a49c;
+    margin-bottom: 20px;
+  }
+
+  .input-section { margin-bottom: 32px; }
 
   label {
     display: block;
@@ -58,17 +68,30 @@
   }
 
   textarea:focus { border-color: #6a6560; }
-
   textarea::placeholder { color: #5a5a5a; }
+
+  input[type="url"], input[type="password"] {
+    width: 100%;
+    background: #1a1a1a;
+    border: 1px solid #3a3a3a;
+    color: #e8e4dc;
+    font-family: 'Georgia', serif;
+    font-size: 15px;
+    padding: 12px 14px;
+    outline: none;
+    border-radius: 2px;
+    transition: border-color 0.2s;
+  }
+
+  input[type="url"]:focus, input[type="password"]:focus { border-color: #6a6560; }
+  input[type="file"] { display: none; }
 
   .file-row {
     display: flex;
     align-items: center;
     gap: 16px;
-    margin-bottom: 40px;
+    margin-bottom: 32px;
   }
-
-  input[type="file"] { display: none; }
 
   .file-label {
     font-size: 14px;
@@ -80,13 +103,39 @@
     cursor: pointer;
     border-radius: 2px;
     transition: border-color 0.2s, color 0.2s;
+    white-space: nowrap;
   }
 
   .file-label:hover { border-color: #6a6560; color: #e8e4dc; }
 
-  .file-name {
-    font-size: 15px;
+  .file-name { font-size: 15px; color: #a8a49c; }
+
+  .url-row {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .url-row input { flex: 1; }
+
+  .fetch-status {
+    font-size: 13px;
     color: #a8a49c;
+    margin-top: 8px;
+    min-height: 18px;
+  }
+
+  .fetch-status.error { color: #d87060; }
+
+  .review-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 32px;
+  }
+
+  @media (max-width: 640px) {
+    .review-fields { grid-template-columns: 1fr; }
   }
 
   .api-row {
@@ -97,21 +146,6 @@
   }
 
   .api-row .input-section { margin-bottom: 0; flex: 1; }
-
-  input[type="password"] {
-    width: 100%;
-    background: #1a1a1a;
-    border: 1px solid #3a3a3a;
-    color: #e8e4dc;
-    font-family: 'Georgia', serif;
-    font-size: 16px;
-    padding: 13px 16px;
-    outline: none;
-    border-radius: 2px;
-    transition: border-color 0.2s;
-  }
-
-  input[type="password"]:focus { border-color: #6a6560; }
 
   .btn-primary {
     background: #e8e4dc;
@@ -139,7 +173,7 @@
     font-size: 14px;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    padding: 13px 28px;
+    padding: 12px 24px;
     cursor: pointer;
     border-radius: 2px;
     transition: border-color 0.2s;
@@ -149,25 +183,34 @@
   .btn-secondary:hover { border-color: #6a6560; }
   .btn-secondary:disabled { color: #5a5a5a; cursor: not-allowed; }
 
-  .status {
-    font-size: 15px;
-    color: #a8a49c;
-    margin-bottom: 40px;
-    font-style: italic;
+  .btn-small {
+    background: transparent;
+    color: #c8c4bc;
+    border: 1px solid #3a3a3a;
+    font-family: 'Georgia', serif;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 12px 16px;
+    cursor: pointer;
+    border-radius: 2px;
+    white-space: nowrap;
+    transition: border-color 0.2s;
   }
 
-  .error {
-    font-size: 15px;
-    color: #d87060;
-    margin-bottom: 40px;
+  .btn-small:hover { border-color: #6a6560; }
+  .btn-small:disabled { color: #5a5a5a; cursor: not-allowed; }
+
+  .divider {
+    border: none;
+    border-top: 1px solid #2a2a2a;
+    margin: 48px 0;
   }
 
-  .cards-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 2px;
-    margin-bottom: 64px;
-  }
+  .status { font-size: 15px; color: #a8a49c; margin-bottom: 32px; font-style: italic; }
+  .error-msg { font-size: 15px; color: #d87060; margin-bottom: 32px; }
+
+  .cards-grid { display: grid; grid-template-columns: 1fr; gap: 2px; margin-bottom: 48px; }
 
   .card {
     background: #1a1a1a;
@@ -184,31 +227,11 @@
     gap: 16px;
   }
 
-  .card-number {
-    font-size: 14px;
-    letter-spacing: 0.1em;
-    color: #a8a49c;
-    flex-shrink: 0;
-  }
+  .card-number { font-size: 14px; letter-spacing: 0.1em; color: #a8a49c; flex-shrink: 0; }
+  .card-title { font-size: 18px; color: #e8e4dc; font-weight: normal; }
+  .card-subtitle { font-size: 13px; letter-spacing: 0.1em; text-transform: uppercase; color: #a8a49c; flex-shrink: 0; }
 
-  .card-title {
-    font-size: 18px;
-    color: #e8e4dc;
-    font-weight: normal;
-  }
-
-  .card-subtitle {
-    font-size: 13px;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: #a8a49c;
-    flex-shrink: 0;
-  }
-
-  .tab-bar {
-    display: flex;
-    border-bottom: 1px solid #2a2a2a;
-  }
+  .tab-bar { display: flex; border-bottom: 1px solid #2a2a2a; }
 
   .tab {
     font-size: 14px;
@@ -238,49 +261,12 @@
 
   .tab-content.active { display: block; }
 
-  .divider {
-    border: none;
-    border-top: 1px solid #2a2a2a;
-    margin: 64px 0;
-  }
-
-  .review-section-header {
-    margin-bottom: 32px;
-  }
-
-  .review-section-header h2 {
-    font-size: 16px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: #c8c4bc;
-    font-weight: normal;
-    margin-bottom: 10px;
-  }
-
-  .review-section-header p {
-    font-size: 15px;
-    color: #a8a49c;
-    line-height: 1.6;
-  }
-
-  .review-fields {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 24px;
-    margin-bottom: 32px;
-  }
-
-  @media (max-width: 640px) {
-    .review-fields { grid-template-columns: 1fr; }
-    .api-row { flex-direction: column; }
-  }
-
   .ranking-result {
     background: #1a1a1a;
     border: 1px solid #2a2a2a;
     border-radius: 2px;
     padding: 32px;
-    margin-top: 40px;
+    margin-top: 32px;
   }
 
   .ranking-result h3 {
@@ -292,10 +278,7 @@
     margin-bottom: 24px;
   }
 
-  .rank-list {
-    list-style: none;
-    margin-bottom: 32px;
-  }
+  .rank-list { list-style: none; margin-bottom: 32px; }
 
   .rank-item {
     display: flex;
@@ -307,27 +290,9 @@
 
   .rank-item:last-child { border-bottom: none; }
 
-  .rank-num {
-    font-size: 14px;
-    letter-spacing: 0.1em;
-    color: #a8a49c;
-    width: 24px;
-    flex-shrink: 0;
-  }
-
-  .rank-title {
-    font-size: 17px;
-    color: #e8e4dc;
-  }
-
-  .rank-tag {
-    font-size: 13px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: #a8a49c;
-    margin-left: auto;
-    flex-shrink: 0;
-  }
+  .rank-num { font-size: 14px; color: #a8a49c; width: 24px; flex-shrink: 0; }
+  .rank-title { font-size: 17px; color: #e8e4dc; }
+  .rank-tag { font-size: 13px; text-transform: uppercase; color: #a8a49c; margin-left: auto; flex-shrink: 0; }
 
   .rank-reason {
     font-size: 15px;
@@ -355,8 +320,38 @@
 
   <h1>Designer Hypothesis Incubator</h1>
 
+  <!-- REVIEW INTELLIGENCE LAYER (top, always visible) -->
+  <div class="section-label">Review Intelligence Layer</div>
+  <p class="section-sub">Paste Google Maps URLs to fetch reviews. You can test this before generating hypotheses.</p>
+
+  <div class="review-fields">
+    <div class="input-section">
+      <label for="clientReviewUrl">Client Google Maps URL</label>
+      <div class="url-row">
+        <input type="url" id="clientReviewUrl" placeholder="https://www.google.com/maps/place/…">
+        <button class="btn-small" id="fetchClientBtn" onclick="fetchReviews('client')">Fetch</button>
+      </div>
+      <div class="fetch-status" id="clientReviewStatus"></div>
+      <textarea id="clientReviews" rows="5" placeholder="Reviews will appear here after fetching…" style="margin-top:10px;"></textarea>
+    </div>
+    <div class="input-section">
+      <label for="competitorReviewUrl">Competitor Google Maps URL</label>
+      <div class="url-row">
+        <input type="url" id="competitorReviewUrl" placeholder="https://www.google.com/maps/place/…">
+        <button class="btn-small" id="fetchCompetitorBtn" onclick="fetchReviews('competitor')">Fetch</button>
+      </div>
+      <div class="fetch-status" id="competitorReviewStatus"></div>
+      <textarea id="competitorReviews" rows="5" placeholder="Reviews will appear here after fetching…" style="margin-top:10px;"></textarea>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- BRIEF + GENERATION -->
+  <div class="section-label" style="margin-bottom:20px;">Client Brief</div>
+
   <div class="input-section">
-    <label for="briefText">Client Brief</label>
+    <label for="briefText">Brief Text</label>
     <textarea id="briefText" rows="10" placeholder="Paste your client brief here…"></textarea>
   </div>
 
@@ -375,44 +370,16 @@
   </div>
 
   <div class="status hidden" id="status">Generating hypotheses…</div>
-  <div class="error hidden" id="errorMsg"></div>
+  <div class="error-msg hidden" id="errorMsg"></div>
 
   <div class="cards-grid hidden" id="cardsGrid"></div>
 
-  <hr class="divider hidden" id="reviewDivider">
-
-  <div class="hidden" id="reviewSection">
-    <div class="review-section-header">
-      <h2>Review Intelligence Layer</h2>
-      <p>Paste Google reviews to rank the hypotheses against real customer voice.</p>
-    </div>
-
-    <div class="review-fields">
-      <div class="input-section">
-        <label for="clientReviewUrl">Client Google Maps URL</label>
-        <div style="display:flex;gap:10px;align-items:flex-start;">
-          <input type="url" id="clientReviewUrl" placeholder="https://www.google.com/maps/place/…" style="flex:1;background:#1a1a1a;border:1px solid #3a3a3a;color:#e8e4dc;font-family:Georgia,serif;font-size:15px;padding:12px 14px;outline:none;border-radius:2px;">
-          <button class="btn-secondary" onclick="fetchReviews('client')" id="fetchClientBtn" style="padding:12px 16px;font-size:13px;">Fetch</button>
-        </div>
-        <div id="clientReviewStatus" style="font-size:13px;color:#a8a49c;margin-top:8px;min-height:18px;"></div>
-        <textarea id="clientReviews" rows="6" placeholder="Reviews will appear here after fetching…" style="margin-top:10px;"></textarea>
-      </div>
-      <div class="input-section">
-        <label for="competitorReviewUrl">Competitor Google Maps URL</label>
-        <div style="display:flex;gap:10px;align-items:flex-start;">
-          <input type="url" id="competitorReviewUrl" placeholder="https://www.google.com/maps/place/…" style="flex:1;background:#1a1a1a;border:1px solid #3a3a3a;color:#e8e4dc;font-family:Georgia,serif;font-size:15px;padding:12px 14px;outline:none;border-radius:2px;">
-          <button class="btn-secondary" onclick="fetchReviews('competitor')" id="fetchCompetitorBtn" style="padding:12px 16px;font-size:13px;">Fetch</button>
-        </div>
-        <div id="competitorReviewStatus" style="font-size:13px;color:#a8a49c;margin-top:8px;min-height:18px;"></div>
-        <textarea id="competitorReviews" rows="6" placeholder="Reviews will appear here after fetching…" style="margin-top:10px;"></textarea>
-      </div>
-    </div>
-
+  <!-- RANK -->
+  <div class="hidden" id="rankSection">
+    <hr class="divider">
     <button class="btn-secondary" id="rankBtn" onclick="rankHypotheses()">Rank the Bets</button>
-
     <div class="status hidden" id="rankStatus">Analyzing reviews…</div>
-    <div class="error hidden" id="rankErrorMsg"></div>
-
+    <div class="error-msg hidden" id="rankErrorMsg"></div>
     <div class="ranking-result hidden" id="rankingResult">
       <h3>Ranked Bets</h3>
       <ol class="rank-list" id="rankList"></ol>
@@ -455,8 +422,8 @@
 
   function setTab(cardIndex, tabName) {
     const card = document.querySelectorAll('.card')[cardIndex];
-    card.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-    card.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    card.querySelectorAll('.tab').forEach(function(t) { t.classList.remove('active'); });
+    card.querySelectorAll('.tab-content').forEach(function(c) { c.classList.remove('active'); });
     card.querySelector('.tab[data-tab="' + tabName + '"]').classList.add('active');
     card.querySelector('.tab-content[data-tab="' + tabName + '"]').classList.add('active');
   }
@@ -465,7 +432,6 @@
     generatedCards = cards;
     const grid = document.getElementById('cardsGrid');
     grid.innerHTML = '';
-
     cards.forEach(function(card, i) {
       const el = document.createElement('div');
       el.className = 'card';
@@ -485,10 +451,43 @@
         '<div class="tab-content" data-tab="measurements">' + card.measurements + '</div>';
       grid.appendChild(el);
     });
-
     grid.classList.remove('hidden');
-    document.getElementById('reviewDivider').classList.remove('hidden');
-    document.getElementById('reviewSection').classList.remove('hidden');
+    document.getElementById('rankSection').classList.remove('hidden');
+  }
+
+  async function fetchReviews(type) {
+    const urlId = type === 'client' ? 'clientReviewUrl' : 'competitorReviewUrl';
+    const textareaId = type === 'client' ? 'clientReviews' : 'competitorReviews';
+    const statusId = type === 'client' ? 'clientReviewStatus' : 'competitorReviewStatus';
+    const btnId = type === 'client' ? 'fetchClientBtn' : 'fetchCompetitorBtn';
+
+    const url = document.getElementById(urlId).value.trim();
+    if (!url) { alert('Please enter a Google Maps URL.'); return; }
+
+    const btn = document.getElementById(btnId);
+    const status = document.getElementById(statusId);
+    btn.disabled = true;
+    status.className = 'fetch-status';
+    status.textContent = 'Fetching reviews… (may take up to 45 seconds)';
+
+    try {
+      const response = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'fetch_reviews', url: url })
+      });
+      const raw = await response.text();
+      let data;
+      try { data = JSON.parse(raw); } catch(e) { throw new Error(raw.substring(0, 200)); }
+      if (data.error) throw new Error(data.error);
+      document.getElementById(textareaId).value = data.reviews;
+      const count = data.reviews.split('\n\n').length;
+      status.textContent = count + ' reviews fetched.';
+    } catch(err) {
+      status.className = 'fetch-status error';
+      status.textContent = 'Error: ' + err.message;
+    }
+    btn.disabled = false;
   }
 
   async function generateHypotheses() {
@@ -503,8 +502,7 @@
     document.getElementById('status').classList.remove('hidden');
     errEl.classList.add('hidden');
     document.getElementById('cardsGrid').classList.add('hidden');
-    document.getElementById('reviewDivider').classList.add('hidden');
-    document.getElementById('reviewSection').classList.add('hidden');
+    document.getElementById('rankSection').classList.add('hidden');
 
     const systemPrompt = 'You are a brand strategy and design hypothesis expert. Given a client brief, generate exactly 5 distinct design hypotheses. Each hypothesis should represent a genuinely different strategic bet on what the brand\'s core positioning and design direction should be.\n\nReturn ONLY valid JSON with this exact structure, no markdown, no preamble:\n{\n  "hypotheses": [\n    {\n      "title": "Short evocative title",\n      "tag": "2-word descriptor",\n      "hypothesis": "The core design hypothesis — what this bet is and what it would look like if true.",\n      "why": "The strategic rationale — why this direction, what market insight drives it, what competitor gap it exploits.",\n      "measurements": "How you would know if this bet is working — specific design quality criteria and success signals."\n    }\n  ]\n}';
 
@@ -527,15 +525,10 @@
 
       const raw = await response.text();
       let data;
-      try {
-        data = JSON.parse(raw);
-      } catch(e) {
-        throw new Error('API returned: ' + raw.substring(0, 200));
-      }
-
+      try { data = JSON.parse(raw); } catch(e) { throw new Error('API returned: ' + raw.substring(0, 200)); }
       if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
 
-      const text = data.content && data.content[0] && data.content[0].text ? data.content[0].text : '';
+      const text = data.content && data.content[0] ? data.content[0].text : '';
       const clean = text.replace(/```json|```/g, '').trim();
       const parsed = JSON.parse(clean);
 
@@ -546,40 +539,7 @@
       errEl.textContent = 'Error: ' + err.message;
       errEl.classList.remove('hidden');
     }
-
     document.getElementById('generateBtn').disabled = false;
-  }
-
-  async function fetchReviews(type) {
-    const urlId = type === 'client' ? 'clientReviewUrl' : 'competitorReviewUrl';
-    const textareaId = type === 'client' ? 'clientReviews' : 'competitorReviews';
-    const statusId = type === 'client' ? 'clientReviewStatus' : 'competitorReviewStatus';
-    const btnId = type === 'client' ? 'fetchClientBtn' : 'fetchCompetitorBtn';
-
-    const url = document.getElementById(urlId).value.trim();
-    if (!url) { alert('Please enter a Google Maps URL.'); return; }
-
-    const btn = document.getElementById(btnId);
-    const status = document.getElementById(statusId);
-    btn.disabled = true;
-    status.textContent = 'Fetching reviews… (may take up to 45 seconds)';
-
-    try {
-      const response = await fetch('/api/generate', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'fetch_reviews', url: url })
-      });
-      const data = await response.json();
-      if (data.error) throw new Error(data.error);
-      document.getElementById(textareaId).value = data.reviews;
-      const count = data.reviews.split('\n\n').length;
-      status.textContent = count + ' reviews fetched.';
-    } catch(err) {
-      status.style.color = '#d87060';
-      status.textContent = 'Error: ' + err.message;
-    }
-    btn.disabled = false;
   }
 
   async function rankHypotheses() {
@@ -588,15 +548,8 @@
     const competitorReviews = document.getElementById('competitorReviews').value.trim();
     const rankErrEl = document.getElementById('rankErrorMsg');
 
-    if (!clientReviews && !competitorReviews) {
-      alert('Please paste at least one set of reviews.');
-      return;
-    }
-
-    if (generatedCards.length === 0) {
-      alert('Please generate hypotheses first.');
-      return;
-    }
+    if (!clientReviews && !competitorReviews) { alert('Please fetch or paste at least one set of reviews.'); return; }
+    if (generatedCards.length === 0) { alert('Please generate hypotheses first.'); return; }
 
     document.getElementById('rankBtn').disabled = true;
     document.getElementById('rankStatus').classList.remove('hidden');
@@ -607,9 +560,9 @@
       return 'Bet ' + (i + 1) + ': "' + c.title + '" — ' + c.hypothesis;
     }).join('\n\n');
 
-    const systemPrompt = 'You are a brand strategist analyzing Google reviews to determine which strategic bet is most strongly supported by real customer voice.\n\nYou will receive:\n1. Five hypothesis bets from a Designer Hypothesis Incubator\n2. Reviews from the client\'s own Google Business Profile\n3. Reviews from competitor Google Business Profiles\n\nYour job is to analyze the contrast between client and competitor reviews to determine which bets are most grounded in real market reality versus which are based on wishful thinking.\n\nLook for:\n- What customers consistently praise about the client that competitors don\'t offer\n- What competitors are missing or getting criticized for, even subtly\n- What emotional language customers use — not just what they say but how they say it\n- Gaps between what the client thinks their differentiator is and what customers actually value\n\nReturn ONLY valid JSON, no markdown, no preamble:\n{\n  "ranked": [\n    { "rank": 1, "title": "exact title of bet", "signal": "brief 3-5 word signal" },\n    { "rank": 2, "title": "exact title of bet", "signal": "brief 3-5 word signal" },\n    { "rank": 3, "title": "exact title of bet", "signal": "brief 3-5 word signal" },\n    { "rank": 4, "title": "exact title of bet", "signal": "brief 3-5 word signal" },\n    { "rank": 5, "title": "exact title of bet", "signal": "brief 3-5 word signal" }\n  ],\n  "reasoning": "2-3 paragraphs explaining what the reviews revealed, what contrast emerged between client and competitor language, and why the top-ranked bet is the strongest strategic direction."\n}';
+    const systemPrompt = 'You are a brand strategist analyzing Google reviews to determine which strategic bet is most strongly supported by real customer voice.\n\nAnalyze the contrast between client and competitor reviews to determine which bets are most grounded in real market reality. Look for: what customers consistently praise about the client that competitors don\'t offer; what competitors are missing; what emotional language customers use; gaps between what the client thinks their differentiator is and what customers actually value.\n\nReturn ONLY valid JSON, no markdown, no preamble:\n{\n  "ranked": [\n    { "rank": 1, "title": "exact title of bet", "signal": "brief 3-5 word signal" },\n    { "rank": 2, "title": "exact title of bet", "signal": "brief 3-5 word signal" },\n    { "rank": 3, "title": "exact title of bet", "signal": "brief 3-5 word signal" },\n    { "rank": 4, "title": "exact title of bet", "signal": "brief 3-5 word signal" },\n    { "rank": 5, "title": "exact title of bet", "signal": "brief 3-5 word signal" }\n  ],\n  "reasoning": "2-3 paragraphs explaining what the reviews revealed and why the top-ranked bet is the strongest strategic direction."\n}';
 
-    const userMessage = 'Here are the five hypothesis bets:\n\n' + cardSummaries + '\n\n---\n\nClient Reviews:\n' + (clientReviews || 'None provided') + '\n\n---\n\nCompetitor Reviews:\n' + (competitorReviews || 'None provided') + '\n\nRank the five bets based on what the reviews reveal.';
+    const userMessage = 'Five hypothesis bets:\n\n' + cardSummaries + '\n\n---\n\nClient Reviews:\n' + (clientReviews || 'None provided') + '\n\n---\n\nCompetitor Reviews:\n' + (competitorReviews || 'None provided') + '\n\nRank the five bets.';
 
     try {
       const response = await fetch('/api/generate', {
@@ -625,15 +578,10 @@
 
       const raw = await response.text();
       let data;
-      try {
-        data = JSON.parse(raw);
-      } catch(e) {
-        throw new Error('API returned: ' + raw.substring(0, 200));
-      }
-
+      try { data = JSON.parse(raw); } catch(e) { throw new Error(raw.substring(0, 200)); }
       if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
 
-      const text = data.content && data.content[0] && data.content[0].text ? data.content[0].text : '';
+      const text = data.content && data.content[0] ? data.content[0].text : '';
       const clean = text.replace(/```json|```/g, '').trim();
       const parsed = JSON.parse(clean);
 
@@ -657,7 +605,6 @@
       rankErrEl.textContent = 'Error: ' + err.message;
       rankErrEl.classList.remove('hidden');
     }
-
     document.getElementById('rankBtn').disabled = false;
   }
 </script>
