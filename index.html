@@ -3,355 +3,615 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Designer — Hypothesis Incubator</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<title>Designer Hypothesis Incubator</title>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  :root {
-    --bg: #F7F5F0; --surface: #FFFFFF;
-    --border: rgba(0,0,0,0.15); --border-mid: rgba(0,0,0,0.25);
-    --text-primary: #111010; --text-secondary: #3D3C3A; --text-tertiary: #6B6860;
-    --serif: 'DM Serif Display', Georgia, serif; --sans: 'DM Sans', system-ui, sans-serif;
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Georgia', serif;
+    background: #0f0f0f;
+    color: #e8e4dc;
+    min-height: 100vh;
+    padding: 48px 24px;
   }
-  body { font-family: var(--sans); background: var(--bg); color: var(--text-primary); min-height: 100vh; font-size: 17px; line-height: 1.65; }
-  header { padding: 2rem 3rem; border-bottom: 1px solid var(--border); display: flex; align-items: baseline; gap: 1.5rem; }
-  .wordmark { font-family: var(--serif); font-size: 24px; letter-spacing: -0.02em; color: var(--text-primary); }
-  .wordmark span { font-family: var(--sans); font-size: 13px; font-weight: 400; color: var(--text-tertiary); letter-spacing: 0.1em; text-transform: uppercase; margin-left: 12px; }
-  main { max-width: 860px; margin: 0 auto; padding: 3rem 2rem 6rem; }
-  .api-bar { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.25rem; margin-bottom: 2.5rem; display: flex; align-items: center; gap: 12px; }
-  .api-label { font-size: 13px; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.1em; white-space: nowrap; font-weight: 500; }
-  .api-input { flex: 1; border: none; background: transparent; font-family: 'Courier New', monospace; font-size: 14px; color: var(--text-primary); outline: none; }
-  .api-status { font-size: 13px; padding: 4px 12px; border-radius: 999px; font-weight: 500; }
-  .api-status.set { background: #C6EDD4; color: #0D4D24; }
-  .api-status.unset { background: #F5C4B3; color: #6B1F06; }
-  .brief-section { margin-bottom: 1.5rem; }
-  .section-label { font-size: 13px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 10px; display: block; }
-  .upload-zone { border: 2px dashed var(--border-mid); border-radius: 10px; padding: 1.5rem; text-align: center; cursor: pointer; transition: border-color 0.15s, background 0.15s; background: var(--surface); margin-bottom: 10px; position: relative; }
-  .upload-zone:hover { border-color: #111010; background: #FAFAF8; }
-  .upload-zone.dragover { border-color: #111010; background: #F0EEE9; }
-  .upload-zone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
-  .upload-icon { font-size: 24px; margin-bottom: 8px; color: var(--text-secondary); }
-  .upload-text { font-size: 16px; color: var(--text-primary); }
-  .upload-text strong { font-weight: 500; }
-  .upload-sub { font-size: 14px; color: var(--text-tertiary); margin-top: 4px; }
-  .file-chip { display: none; align-items: center; gap: 8px; padding: 10px 14px; background: #C6EDD4; border-radius: 6px; margin-bottom: 10px; font-size: 15px; color: #0D4D24; }
-  .file-chip.visible { display: flex; }
-  .file-chip-name { flex: 1; font-weight: 500; }
-  .file-chip-remove { cursor: pointer; color: #0D4D24; background: none; border: none; font-size: 20px; line-height: 1; padding: 0; font-family: var(--sans); }
-  .or-divider { display: flex; align-items: center; gap: 10px; margin: 12px 0; color: var(--text-tertiary); font-size: 13px; text-transform: uppercase; letter-spacing: 0.08em; }
-  .or-divider::before, .or-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-  textarea { width: 100%; min-height: 130px; padding: 1rem 1.25rem; font-family: var(--sans); font-size: 16px; color: var(--text-primary); background: var(--surface); border: 1px solid var(--border-mid); border-radius: 10px; resize: vertical; line-height: 1.65; transition: border-color 0.15s; }
-  textarea:focus { outline: none; border-color: #111010; }
-  textarea::placeholder { color: var(--text-tertiary); }
-  .controls { display: flex; align-items: center; gap: 1.5rem; margin-top: 1rem; flex-wrap: wrap; }
-  .toggle-wrap { display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; }
-  .toggle-wrap input[type=checkbox] { width: 18px; height: 18px; accent-color: #111010; cursor: pointer; }
-  .toggle-label { font-size: 15px; color: var(--text-secondary); }
-  .count-wrap { display: flex; align-items: center; gap: 8px; }
-  .count-label { font-size: 15px; color: var(--text-secondary); }
-  select { padding: 8px 12px; font-family: var(--sans); font-size: 15px; border: 1px solid var(--border-mid); border-radius: 6px; background: var(--surface); color: var(--text-primary); cursor: pointer; }
-  .generate-btn { margin-left: auto; padding: 12px 32px; font-family: var(--sans); font-size: 16px; font-weight: 500; background: #111010; color: #F7F5F0; border: none; border-radius: 8px; cursor: pointer; transition: opacity 0.15s, transform 0.1s; }
-  .generate-btn:hover { opacity: 0.85; }
-  .generate-btn:active { transform: scale(0.98); }
-  .generate-btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
-  .loading { display: none; flex-direction: column; align-items: center; padding: 5rem 0; gap: 1.5rem; }
-  .loading.visible { display: flex; }
-  .loading-text { font-family: var(--serif); font-style: italic; font-size: 20px; color: var(--text-secondary); }
-  .dots { display: flex; gap: 8px; }
-  .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text-tertiary); animation: pulse 1.4s ease-in-out infinite; }
-  .dot:nth-child(2) { animation-delay: 0.2s; }
-  .dot:nth-child(3) { animation-delay: 0.4s; }
-  @keyframes pulse { 0%,80%,100% { opacity:0.25; transform:scale(0.75); } 40% { opacity:1; transform:scale(1); } }
-  .results { display: none; }
-  .results.visible { display: block; }
-  .results-meta { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
-  .results-brief { font-size: 15px; color: var(--text-secondary); line-height: 1.6; max-width: 600px; }
-  .new-brief-btn { font-family: var(--sans); font-size: 15px; color: var(--text-secondary); background: none; border: 1px solid var(--border-mid); border-radius: 6px; padding: 8px 16px; cursor: pointer; white-space: nowrap; }
-  .new-brief-btn:hover { border-color: #111010; color: var(--text-primary); }
-  .axes-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 2rem; }
-  .axis-tag { font-size: 14px; padding: 5px 14px; border-radius: 999px; border: 1px solid var(--border-mid); color: var(--text-secondary); background: var(--surface); }
-  .hypotheses { display: flex; flex-direction: column; gap: 14px; }
-  .hyp-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; transition: border-color 0.15s; }
-  .hyp-card:hover { border-color: var(--border-mid); }
-  .card-top { padding: 1.5rem 1.5rem 1rem; cursor: pointer; }
-  .card-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 8px; }
-  .card-name { font-family: var(--serif); font-size: 22px; color: var(--text-primary); line-height: 1.2; }
-  .card-badge { font-size: 12px; font-weight: 500; padding: 4px 12px; border-radius: 999px; white-space: nowrap; flex-shrink: 0; letter-spacing: 0.04em; }
-  .card-position { font-size: 16px; color: var(--text-secondary); font-style: italic; line-height: 1.55; margin-bottom: 12px; }
-  .card-axes { display: flex; flex-wrap: wrap; gap: 6px; }
-  .card-axis { font-size: 13px; padding: 3px 10px; border-radius: 4px; background: var(--bg); color: var(--text-secondary); border: 1px solid var(--border); }
-  .tab-bar { display: flex; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); background: var(--bg); }
-  .tab-btn { flex: 1; padding: 11px; font-family: var(--sans); font-size: 13px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; color: var(--text-tertiary); transition: color 0.15s; }
-  .tab-btn.active { color: var(--text-primary); border-bottom-color: var(--text-primary); background: var(--surface); }
-  .tab-btn + .tab-btn { border-left: 1px solid var(--border); }
-  .tab-content { display: none; padding: 1.5rem; font-size: 16px; color: var(--text-secondary); line-height: 1.75; }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  h1 {
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #6b6560;
+    margin-bottom: 48px;
+    font-family: 'Georgia', serif;
+    font-weight: normal;
+  }
+
+  .input-section {
+    margin-bottom: 40px;
+  }
+
+  label {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #6b6560;
+    margin-bottom: 10px;
+  }
+
+  textarea {
+    width: 100%;
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    color: #e8e4dc;
+    font-family: 'Georgia', serif;
+    font-size: 15px;
+    line-height: 1.7;
+    padding: 16px;
+    resize: vertical;
+    outline: none;
+    border-radius: 2px;
+    transition: border-color 0.2s;
+  }
+
+  textarea:focus { border-color: #4a4540; }
+
+  .file-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  input[type="file"] { display: none; }
+
+  .file-label {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #6b6560;
+    border: 1px solid #2a2a2a;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .file-label:hover { border-color: #4a4540; color: #e8e4dc; }
+
+  .file-name {
+    font-size: 13px;
+    color: #4a4540;
+  }
+
+  .api-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 40px;
+    align-items: flex-end;
+  }
+
+  .api-row .input-section { margin-bottom: 0; flex: 1; }
+
+  input[type="password"] {
+    width: 100%;
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    color: #e8e4dc;
+    font-family: 'Georgia', serif;
+    font-size: 15px;
+    padding: 12px 16px;
+    outline: none;
+    border-radius: 2px;
+    transition: border-color 0.2s;
+  }
+
+  input[type="password"]:focus { border-color: #4a4540; }
+
+  .btn-primary {
+    background: #e8e4dc;
+    color: #0f0f0f;
+    border: none;
+    font-family: 'Georgia', serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 14px 32px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background 0.2s;
+    white-space: nowrap;
+  }
+
+  .btn-primary:hover { background: #ffffff; }
+  .btn-primary:disabled { background: #2a2a2a; color: #4a4540; cursor: not-allowed; }
+
+  .btn-secondary {
+    background: transparent;
+    color: #e8e4dc;
+    border: 1px solid #2a2a2a;
+    font-family: 'Georgia', serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 12px 28px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: border-color 0.2s;
+    white-space: nowrap;
+  }
+
+  .btn-secondary:hover { border-color: #4a4540; }
+  .btn-secondary:disabled { color: #4a4540; cursor: not-allowed; }
+
+  .status {
+    font-size: 13px;
+    color: #6b6560;
+    margin-bottom: 40px;
+    font-style: italic;
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2px;
+    margin-bottom: 64px;
+  }
+
+  .card {
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .card-header {
+    padding: 20px 24px 16px;
+    border-bottom: 1px solid #2a2a2a;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+
+  .card-number {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: #4a4540;
+    flex-shrink: 0;
+  }
+
+  .card-title {
+    font-size: 17px;
+    color: #e8e4dc;
+    font-weight: normal;
+  }
+
+  .card-subtitle {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #4a4540;
+    flex-shrink: 0;
+  }
+
+  .tab-bar {
+    display: flex;
+    border-bottom: 1px solid #2a2a2a;
+  }
+
+  .tab {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #4a4540;
+    padding: 12px 20px;
+    cursor: pointer;
+    border: none;
+    background: transparent;
+    border-bottom: 1px solid transparent;
+    margin-bottom: -1px;
+    transition: color 0.15s;
+    font-family: 'Georgia', serif;
+  }
+
+  .tab:hover { color: #a8a49c; }
+  .tab.active { color: #e8e4dc; border-bottom-color: #e8e4dc; }
+
+  .tab-content {
+    padding: 24px;
+    font-size: 15px;
+    line-height: 1.8;
+    color: #c8c4bc;
+    display: none;
+  }
+
   .tab-content.active { display: block; }
-  .measure-list { list-style: none; display: flex; flex-direction: column; gap: 12px; }
-  .measure-item { display: flex; gap: 14px; align-items: flex-start; }
-  .measure-num { font-family: var(--serif); font-style: italic; font-size: 18px; color: var(--text-tertiary); flex-shrink: 0; line-height: 1.4; width: 18px; }
-  .error-box { display: none; background: #F5C4B3; border: 1px solid #D45A30; border-radius: 10px; padding: 1rem 1.25rem; font-size: 16px; color: #4A1B0C; margin-top: 1rem; }
-  .error-box.visible { display: block; }
-  .back-link { display: inline-block; margin-bottom: 1.5rem; font-size: 15px; color: var(--text-secondary); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; background: none; border: none; font-family: var(--sans); }
-  .back-link:hover { color: var(--text-primary); }
-  .axes-label { font-size: 13px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 10px; display: block; }
+
+  .divider {
+    border: none;
+    border-top: 1px solid #2a2a2a;
+    margin: 64px 0;
+  }
+
+  .review-section-header {
+    margin-bottom: 32px;
+  }
+
+  .review-section-header h2 {
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #6b6560;
+    font-weight: normal;
+    margin-bottom: 8px;
+  }
+
+  .review-section-header p {
+    font-size: 14px;
+    color: #4a4540;
+    line-height: 1.6;
+  }
+
+  .review-fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 32px;
+  }
+
+  @media (max-width: 640px) {
+    .review-fields { grid-template-columns: 1fr; }
+    .api-row { flex-direction: column; }
+  }
+
+  .ranking-result {
+    background: #1a1a1a;
+    border: 1px solid #2a2a2a;
+    border-radius: 2px;
+    padding: 32px;
+    margin-top: 40px;
+  }
+
+  .ranking-result h3 {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #6b6560;
+    font-weight: normal;
+    margin-bottom: 24px;
+  }
+
+  .rank-list {
+    list-style: none;
+    margin-bottom: 32px;
+  }
+
+  .rank-item {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding: 14px 0;
+    border-bottom: 1px solid #2a2a2a;
+  }
+
+  .rank-item:last-child { border-bottom: none; }
+
+  .rank-num {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    color: #4a4540;
+    width: 20px;
+    flex-shrink: 0;
+  }
+
+  .rank-title {
+    font-size: 16px;
+    color: #e8e4dc;
+  }
+
+  .rank-tag {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #4a4540;
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+
+  .rank-reason {
+    font-size: 14px;
+    line-height: 1.7;
+    color: #6b6560;
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid #2a2a2a;
+  }
+
+  .rank-reason h4 {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #4a4540;
+    font-weight: normal;
+    margin-bottom: 16px;
+  }
+
+  .hidden { display: none; }
 </style>
 </head>
 <body>
-<header>
-  <div class="wordmark">Designer <span>Hypothesis Incubator</span></div>
-</header>
-<main>
-  <div class="api-bar">
-    <span class="api-label">API Key</span>
-    <input class="api-input" type="password" id="api-key" placeholder="sk-ant-..." oninput="updateApiStatus()">
-    <span class="api-status unset" id="api-status">Not set</span>
+<div class="container">
+
+  <h1>Designer Hypothesis Incubator</h1>
+
+  <div class="input-section">
+    <label>Client Brief</label>
+    <textarea id="briefText" rows="10" placeholder="Paste your client brief here…"></textarea>
   </div>
 
-  <div id="input-phase">
-    <div class="brief-section">
-      <span class="section-label">Design brief</span>
-      <div class="upload-zone" id="upload-zone" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
-        <input type="file" accept=".pdf,.txt,.md" onchange="handleFileSelect(event)">
-        <div class="upload-icon">⬆</div>
-        <div class="upload-text"><strong>Upload a brief</strong> — drag & drop or click</div>
-        <div class="upload-sub">PDF, TXT, or MD</div>
-      </div>
-      <div class="file-chip" id="file-chip">
-        <span>📄</span>
-        <span class="file-chip-name" id="file-chip-name"></span>
-        <button class="file-chip-remove" onclick="removeFile()">×</button>
-      </div>
-      <div class="or-divider">or type below</div>
-      <textarea id="brief" placeholder="Describe the problem, the user, and the opportunity. The more specific, the more distinct the hypotheses."></textarea>
-    </div>
-    <div class="controls">
-      <label class="toggle-wrap">
-        <input type="checkbox" id="brainstorm">
-        <span class="toggle-label">Brainstorm directions first (wider net)</span>
-      </label>
-      <div class="count-wrap">
-        <span class="count-label">Hypotheses</span>
-        <select id="hyp-count">
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5" selected>5</option>
-        </select>
-      </div>
-      <button class="generate-btn" id="gen-btn" onclick="generate()">Generate hypotheses →</button>
-    </div>
-    <div class="error-box" id="error-box"></div>
+  <div class="file-row">
+    <label class="file-label" for="pdfInput">Upload PDF Brief</label>
+    <input type="file" id="pdfInput" accept=".pdf">
+    <span class="file-name" id="fileName">No file selected</span>
   </div>
 
-  <div class="loading" id="loading-phase">
-    <div class="dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
-    <div class="loading-text" id="loading-text">Mapping the solution space...</div>
+  <div class="api-row">
+    <div class="input-section">
+      <label>API Key</label>
+      <input type="password" id="apiKey" placeholder="sk-ant-…">
+    </div>
+    <button class="btn-primary" id="generateBtn" onclick="generateHypotheses()">Generate Hypotheses</button>
   </div>
 
-  <div class="results" id="results-phase">
-    <button class="back-link" onclick="reset()">← New brief</button>
-    <div class="results-meta">
-      <div class="results-brief" id="brief-recap"></div>
-      <button class="new-brief-btn" onclick="reset()">New brief</button>
+  <div class="status hidden" id="status">Generating hypotheses…</div>
+
+  <div class="cards-grid hidden" id="cardsGrid"></div>
+
+  <hr class="divider hidden" id="reviewDivider">
+
+  <div class="hidden" id="reviewSection">
+    <div class="review-section-header">
+      <h2>Review Intelligence Layer</h2>
+      <p>Paste Google reviews to rank the hypotheses against real customer voice.</p>
     </div>
-    <span class="axes-label">Exploration axes</span>
-    <div class="axes-row" id="axes-row"></div>
-    <div class="hypotheses" id="hyp-list"></div>
+
+    <div class="review-fields">
+      <div class="input-section">
+        <label>Client Reviews</label>
+        <textarea id="clientReviews" rows="12" placeholder="Paste your client's Google reviews here…"></textarea>
+      </div>
+      <div class="input-section">
+        <label>Competitor Reviews</label>
+        <textarea id="competitorReviews" rows="12" placeholder="Paste competitor Google reviews here…"></textarea>
+      </div>
+    </div>
+
+    <button class="btn-secondary" id="rankBtn" onclick="rankHypotheses()">Rank the Bets</button>
+
+    <div class="status hidden" id="rankStatus">Analyzing reviews…</div>
+
+    <div class="ranking-result hidden" id="rankingResult">
+      <h3>Ranked Bets</h3>
+      <ol class="rank-list" id="rankList"></ol>
+      <div class="rank-reason">
+        <h4>Why this ranking</h4>
+        <div id="rankReason"></div>
+      </div>
+    </div>
   </div>
-</main>
+
+</div>
 
 <script>
-pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  let pdfBase64 = null;
+  let generatedCards = [];
 
-const BADGES = [
-  { bg:'#C6EDD4', color:'#0D4D24' },
-  { bg:'#CECBF6', color:'#26215C' },
-  { bg:'#FAC775', color:'#412402' },
-  { bg:'#F5C4B3', color:'#4A1B0C' },
-  { bg:'#C0DD97', color:'#173404' },
-];
-const LOADING_MSGS = ['Mapping the solution space...','Identifying exploration axes...','Diverging across dimensions...','Placing distinct bets...','Shaping hypotheses...'];
-let loadingInterval;
-
-function updateApiStatus() {
-  const key = document.getElementById('api-key').value.trim();
-  const status = document.getElementById('api-status');
-  if (key.startsWith('sk-ant-') && key.length > 20) {
-    status.textContent = 'Ready'; status.className = 'api-status set';
-  } else {
-    status.textContent = 'Not set'; status.className = 'api-status unset';
-  }
-}
-
-function handleDragOver(e) { e.preventDefault(); document.getElementById('upload-zone').classList.add('dragover'); }
-function handleDragLeave() { document.getElementById('upload-zone').classList.remove('dragover'); }
-function handleDrop(e) {
-  e.preventDefault();
-  document.getElementById('upload-zone').classList.remove('dragover');
-  const file = e.dataTransfer.files[0];
-  if (file) processFile(file);
-}
-function handleFileSelect(e) { const file = e.target.files[0]; if (file) processFile(file); }
-
-async function processFile(file) {
-  const ext = file.name.split('.').pop().toLowerCase();
-  document.getElementById('file-chip-name').textContent = file.name;
-  document.getElementById('file-chip').classList.add('visible');
-  try {
-    if (ext === 'pdf') {
-      const arrayBuffer = await file.arrayBuffer();
-      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-      let text = '';
-      for (let i = 1; i <= pdf.numPages; i++) {
-        const page = await pdf.getPage(i);
-        const content = await page.getTextContent();
-        text += content.items.map(item => item.str).join(' ') + '\n';
-      }
-      document.getElementById('brief').value = text.trim();
-    } else {
-      document.getElementById('brief').value = await file.text();
-    }
-  } catch(err) {
-    showError('Could not read file: ' + err.message);
-  }
-}
-
-function removeFile() {
-  document.getElementById('file-chip').classList.remove('visible');
-  document.getElementById('brief').value = '';
-  document.querySelector('#upload-zone input[type=file]').value = '';
-}
-
-function showPhase(id) {
-  ['input-phase','loading-phase','results-phase'].forEach(p => {
-    const el = document.getElementById(p);
-    if (p === 'loading-phase') el.classList.toggle('visible', p === id);
-    else if (p === 'results-phase') el.classList.toggle('visible', p === id);
-    else el.style.display = p === id ? 'block' : 'none';
+  document.getElementById('pdfInput').addEventListener('change', function(e) {
+    const file = e.target.files[0];
+    if (!file) return;
+    document.getElementById('fileName').textContent = file.name;
+    const reader = new FileReader();
+    reader.onload = function(ev) {
+      pdfBase64 = ev.target.result.split(',')[1];
+    };
+    reader.readAsDataURL(file);
   });
-}
 
-function showError(msg) {
-  const box = document.getElementById('error-box');
-  box.textContent = msg;
-  box.classList.add('visible');
-}
+  function setTab(cardIndex, tabName) {
+    const card = document.querySelectorAll('.card')[cardIndex];
+    card.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    card.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+    card.querySelector(`.tab[data-tab="${tabName}"]`).classList.add('active');
+    card.querySelector(`.tab-content[data-tab="${tabName}"]`).classList.add('active');
+  }
 
-function reset() {
-  stopLoading();
-  showPhase('input-phase');
-  document.getElementById('error-box').classList.remove('visible');
-}
+  function renderCards(cards) {
+    generatedCards = cards;
+    const grid = document.getElementById('cardsGrid');
+    grid.innerHTML = '';
 
-function startLoading() {
-  let i = 0;
-  document.getElementById('loading-text').textContent = LOADING_MSGS[0];
-  loadingInterval = setInterval(() => { i=(i+1)%LOADING_MSGS.length; document.getElementById('loading-text').textContent=LOADING_MSGS[i]; }, 2200);
-}
-function stopLoading() { clearInterval(loadingInterval); }
+    cards.forEach((card, i) => {
+      const el = document.createElement('div');
+      el.className = 'card';
+      el.innerHTML = `
+        <div class="card-header">
+          <span class="card-number">${String(i + 1).padStart(2, '0')}</span>
+          <span class="card-title">${card.title}</span>
+          <span class="card-subtitle">${card.tag || ''}</span>
+        </div>
+        <div class="tab-bar">
+          <button class="tab active" data-tab="hypothesis" onclick="setTab(${i},'hypothesis')">Hypothesis</button>
+          <button class="tab" data-tab="why" onclick="setTab(${i},'why')">Why</button>
+          <button class="tab" data-tab="measurements" onclick="setTab(${i},'measurements')">Measurements</button>
+        </div>
+        <div class="tab-content active" data-tab="hypothesis">${card.hypothesis}</div>
+        <div class="tab-content" data-tab="why">${card.why}</div>
+        <div class="tab-content" data-tab="measurements">${card.measurements}</div>
+      `;
+      grid.appendChild(el);
+    });
 
-function switchTab(card, tab) {
-  card.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.tab === tab));
-  card.querySelectorAll('.tab-content').forEach(c => c.classList.toggle('active', c.dataset.tab === tab));
-}
+    grid.classList.remove('hidden');
+    document.getElementById('reviewDivider').classList.remove('hidden');
+    document.getElementById('reviewSection').classList.remove('hidden');
+  }
 
-async function generate() {
-  const apiKey = document.getElementById('api-key').value.trim();
-  const brief = document.getElementById('brief').value.trim();
-  const count = parseInt(document.getElementById('hyp-count').value);
-  const brainstorm = document.getElementById('brainstorm').checked;
-  document.getElementById('error-box').classList.remove('visible');
+  async function generateHypotheses() {
+    const apiKey = document.getElementById('apiKey').value.trim();
+    const briefText = document.getElementById('briefText').value.trim();
 
-  if (!apiKey) { showError('Please enter your Anthropic API key above.'); return; }
-  if (!brief) { showError('Please enter or upload a design brief.'); return; }
+    if (!apiKey) { alert('Please enter your API key.'); return; }
+    if (!briefText && !pdfBase64) { alert('Please enter a brief or upload a PDF.'); return; }
 
-  document.getElementById('gen-btn').disabled = true;
-  showPhase('loading-phase');
-  startLoading();
+    document.getElementById('generateBtn').disabled = true;
+    document.getElementById('status').classList.remove('hidden');
+    document.getElementById('cardsGrid').classList.add('hidden');
+    document.getElementById('reviewDivider').classList.add('hidden');
+    document.getElementById('reviewSection').classList.add('hidden');
 
-  const system = `You are a senior product designer and design strategist. Generate genuinely distinct design hypotheses for a design brief.
+    const systemPrompt = `You are a brand strategy and design hypothesis expert. Given a client brief, generate exactly 5 distinct design hypotheses. Each hypothesis should represent a genuinely different strategic bet on what the brand's core positioning and design direction should be.
 
-Return ONLY valid JSON — no preamble, no markdown fences.
-
+Return ONLY valid JSON with this exact structure, no markdown, no preamble:
 {
-  "exploration_axes": ["axis 1", "axis 2", "axis 3"],
   "hypotheses": [
     {
-      "name": "Short memorable name",
-      "archetype": "1-2 word label",
-      "position": "One sentence core bet. Starts with a verb.",
-      "description": "2-3 sentences: what the site is, who its for, what it deliberately avoids.",
-      "axes": ["where it sits on axis 1", "where it sits on axis 2"],
-      "why": "3-4 sentences of strategic rationale grounded in the brief — user behavior, competitive gap, or brand tension this hypothesis exploits.",
-      "measurements": [
-        "Design criterion — what good looks like and what overdoing it breaks",
-        "Second criterion",
-        "Third criterion"
-      ]
+      "title": "Short evocative title",
+      "tag": "2-word descriptor",
+      "hypothesis": "The core design hypothesis — what this bet is and what it would look like if true.",
+      "why": "The strategic rationale — why this direction, what market insight drives it, what competitor gap it exploits.",
+      "measurements": "How you would know if this bet is working — specific design quality criteria and success signals."
     }
   ]
-}
+}`;
 
-Rules: exploration_axes are fundamental strategic dimensions. Each hypothesis is a genuinely distinct bet. Avoid the category default. Return exactly ${count} hypotheses.`;
+    const userContent = pdfBase64
+      ? [
+          { type: 'document', source: { type: 'base64', media_type: 'application/pdf', data: pdfBase64 } },
+          { type: 'text', text: briefText ? `Additional context: ${briefText}\n\nGenerate 5 design hypotheses from this brief.` : 'Generate 5 design hypotheses from this brief.' }
+        ]
+      : briefText;
 
-  const userMsg = `Brief: ${brief}${brainstorm ? '\n\nBrainstorm mode ON — wide net first, then select the ' + count + ' with widest spread.' : ''}\n\nGenerate ${count} distinct design hypotheses.`;
+    try {
+      const response = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey },
+        body: JSON.stringify({
+          model: 'claude-haiku-4-5',
+          max_tokens: 3000,
+          system: systemPrompt,
+          messages: [{ role: 'user', content: userContent }]
+        })
+      });
 
-  try {
-    const res = await fetch('/api/generate', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey },
-      body: JSON.stringify({ model: 'claude-haiku-4-5', max_tokens: 2500, system, messages: [{ role: 'user', content: userMsg }] })
-    });
-    const data = await res.json();
-    stopLoading();
-    if (data.error) throw new Error(typeof data.error === 'object' ? data.error.message : data.error);
-    const raw = data.content.find(b => b.type === 'text')?.text || '';
-    const parsed = JSON.parse(raw.replace(/```json|```/g, '').trim());
-    renderResults(brief, parsed);
-  } catch(err) {
-    stopLoading();
-    showPhase('input-phase');
-    document.getElementById('gen-btn').disabled = false;
-    showError('Error: ' + err.message);
+      const data = await response.json();
+      const text = data.content?.[0]?.text || '';
+      const clean = text.replace(/```json|```/g, '').trim();
+      const parsed = JSON.parse(clean);
+
+      renderCards(parsed.hypotheses);
+      document.getElementById('status').classList.add('hidden');
+    } catch (err) {
+      document.getElementById('status').textContent = 'Error: ' + err.message;
+    }
+
+    document.getElementById('generateBtn').disabled = false;
   }
-}
 
-function renderResults(brief, data) {
-  document.getElementById('brief-recap').textContent = brief.slice(0, 300) + (brief.length > 300 ? '...' : '');
-  document.getElementById('axes-row').innerHTML = (data.exploration_axes||[]).map(a => `<span class="axis-tag">${a}</span>`).join('');
-  const list = document.getElementById('hyp-list');
-  list.innerHTML = '';
-  data.hypotheses.forEach((h, i) => {
-    const badge = BADGES[i % BADGES.length];
-    const axTags = (h.axes||[]).map(a => `<span class="card-axis">${a}</span>`).join('');
-    const measures = (h.measurements||[]).map((m,mi) => `<li class="measure-item"><span class="measure-num">${mi+1}</span><span>${m}</span></li>`).join('');
-    const card = document.createElement('div');
-    card.className = 'hyp-card';
-    card.innerHTML = `
-      <div class="card-top" onclick="switchTab(this.closest('.hyp-card'),'hypothesis')">
-        <div class="card-header">
-          <span class="card-name">${h.name}</span>
-          <span class="card-badge" style="background:${badge.bg};color:${badge.color}">${h.archetype}</span>
-        </div>
-        <div class="card-position">"${h.position}"</div>
-        <div class="card-axes">${axTags}</div>
-      </div>
-      <div class="tab-bar">
-        <button class="tab-btn active" data-tab="hypothesis" onclick="switchTab(this.closest('.hyp-card'),'hypothesis')">Hypothesis</button>
-        <button class="tab-btn" data-tab="why" onclick="switchTab(this.closest('.hyp-card'),'why')">Why</button>
-        <button class="tab-btn" data-tab="measurements" onclick="switchTab(this.closest('.hyp-card'),'measurements')">Measurements</button>
-      </div>
-      <div class="tab-content active" data-tab="hypothesis">${h.description}</div>
-      <div class="tab-content" data-tab="why">${h.why}</div>
-      <div class="tab-content" data-tab="measurements"><ul class="measure-list">${measures}</ul></div>
-    `;
-    list.appendChild(card);
-  });
-  document.getElementById('gen-btn').disabled = false;
-  showPhase('results-phase');
-}
+  async function rankHypotheses() {
+    const apiKey = document.getElementById('apiKey').value.trim();
+    const clientReviews = document.getElementById('clientReviews').value.trim();
+    const competitorReviews = document.getElementById('competitorReviews').value.trim();
+
+    if (!clientReviews && !competitorReviews) {
+      alert('Please paste at least one set of reviews.');
+      return;
+    }
+
+    if (generatedCards.length === 0) {
+      alert('Please generate hypotheses first.');
+      return;
+    }
+
+    document.getElementById('rankBtn').disabled = true;
+    document.getElementById('rankStatus').classList.remove('hidden');
+    document.getElementById('rankingResult').classList.add('hidden');
+
+    const cardSummaries = generatedCards.map((c, i) =>
+      `Bet ${i + 1}: "${c.title}" — ${c.hypothesis}`
+    ).join('\n\n');
+
+    const systemPrompt = `You are a brand strategist analyzing Google reviews to determine which strategic bet is most strongly supported by real customer voice.
+
+You will receive:
+1. Five hypothesis bets from a Designer Hypothesis Incubator
+2. Reviews from the client's own Google Business Profile
+3. Reviews from competitor Google Business Profiles
+
+Your job is to analyze the contrast between client and competitor reviews to determine which bets are most grounded in real market reality versus which are based on wishful thinking.
+
+Look for:
+- What customers consistently praise or notice about the client that competitors don't offer
+- What competitors are missing or getting criticized for (even subtly)
+- What emotional language customers use — not just what they say but how they say it
+- Gaps between what the client thinks their differentiator is and what customers actually value
+
+Return ONLY valid JSON, no markdown, no preamble:
+{
+  "ranked": [
+    { "rank": 1, "title": "exact title of bet", "signal": "brief 3-5 word signal" },
+    { "rank": 2, "title": "exact title of bet", "signal": "brief 3-5 word signal" },
+    { "rank": 3, "title": "exact title of bet", "signal": "brief 3-5 word signal" },
+    { "rank": 4, "title": "exact title of bet", "signal": "brief 3-5 word signal" },
+    { "rank": 5, "title": "exact title of bet", "signal": "brief 3-5 word signal" }
+  ],
+  "reasoning": "2-3 paragraphs explaining what the reviews revealed, what contrast emerged between client and competitor language, and why the top-ranked bet is the strongest strategic direction."
+}`;
+
+    const userMessage = `Here are the five hypothesis bets:\n\n${cardSummaries}\n\n---\n\nClient Reviews:\n${clientReviews || 'None provided'}\n\n---\n\nCompetitor Reviews:\n${competitorReviews || 'None provided'}\n\nRank the five bets based on what the reviews reveal.`;
+
+    try {
+      const response = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey },
+        body: JSON.stringify({
+          model: 'claude-haiku-4-5',
+          max_tokens: 1500,
+          system: systemPrompt,
+          messages: [{ role: 'user', content: userMessage }]
+        })
+      });
+
+      const data = await response.json();
+      const text = data.content?.[0]?.text || '';
+      const clean = text.replace(/```json|```/g, '').trim();
+      const parsed = JSON.parse(clean);
+
+      const list = document.getElementById('rankList');
+      list.innerHTML = '';
+      parsed.ranked.forEach(item => {
+        const li = document.createElement('li');
+        li.className = 'rank-item';
+        li.innerHTML = `
+          <span class="rank-num">${item.rank}</span>
+          <span class="rank-title">${item.title}</span>
+          <span class="rank-tag">${item.signal}</span>
+        `;
+        list.appendChild(li);
+      });
+
+      document.getElementById('rankReason').innerHTML = parsed.reasoning.replace(/\n\n/g, '<br><br>');
+      document.getElementById('rankingResult').classList.remove('hidden');
+      document.getElementById('rankStatus').classList.add('hidden');
+    } catch (err) {
+      document.getElementById('rankStatus').textContent = 'Error: ' + err.message;
+    }
+
+    document.getElementById('rankBtn').disabled = false;
+  }
 </script>
 </body>
 </html>
