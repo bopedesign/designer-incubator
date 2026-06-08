@@ -348,7 +348,7 @@ Rules: exploration_axes are fundamental strategic dimensions. Each hypothesis is
         'Content-Type': 'application/json',
         'x-api-key': apiKey,
       },
-      body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 2500, system, messages: [{ role: 'user', content: userMsg }] })
+      body: JSON.stringify({ model: 'claude-sonnet-4-5', max_tokens: 2500, system, messages: [{ role: 'user', content: userMsg }] })
     });
     const data = await res.json();
     stopLoading();
