@@ -1020,6 +1020,7 @@ Return ONLY valid JSON, no markdown, no preamble:
     return out;
   }
 
+  async function rankHypotheses() {
     const apiKey = document.getElementById('apiKey').value.trim();
     const clientReviews = document.getElementById('clientReviews').value.trim();
     const competitorReviews = document.getElementById('competitorReviews').value.trim();
