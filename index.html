@@ -564,20 +564,44 @@
 
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>
-  pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-
+  // Load pdf.js dynamically so we can catch load errors
+  var pdfJsReady = false;
+  var pdfJsScript = document.createElement('script');
+  pdfJsScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+  pdfJsScript.onload = function() {
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    pdfJsReady = true;
+  };
+  pdfJsScript.onerror = function() {
+    document.getElementById('fileName').textContent = 'PDF library failed to load. Paste brief as text instead.';
+  };
+  document.head.appendChild(pdfJsScript);
+</script>
+<script>
   let extractedPdfText = null;
   let generatedCards = [];
 
   document.getElementById('pdfInput').addEventListener('change', async function(e) {
     const file = e.target.files[0];
     if (!file) return;
-    document.getElementById('fileName').textContent = file.name + ' — extracting text...';
+
+    const fileNameEl = document.getElementById('fileName');
+
+    // Show file is selected immediately regardless of what happens next
+    fileNameEl.textContent = file.name + ' — reading…';
+    extractedPdfText = null;
+
+    if (!pdfJsReady) {
+      // Fall back to reading as plain text if pdf.js isn't loaded
+      fileNameEl.textContent = file.name + ' (PDF library not ready — paste brief as text)';
+      return;
+    }
+
     try {
       const arrayBuffer = await file.arrayBuffer();
-      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      const loadingTask = pdfjsLib.getDocument({ data: arrayBuffer });
+      const pdf = await loadingTask.promise;
       let fullText = '';
       for (let i = 1; i <= pdf.numPages; i++) {
         const page = await pdf.getPage(i);
@@ -585,9 +609,13 @@
         fullText += content.items.map(function(item) { return item.str; }).join(' ') + '\n';
       }
       extractedPdfText = fullText.trim();
-      document.getElementById('fileName').textContent = file.name + ' (' + pdf.numPages + ' pages extracted)';
+      if (extractedPdfText.length < 50) {
+        fileNameEl.textContent = file.name + ' — extracted but very little text found. Try pasting the brief as text.';
+      } else {
+        fileNameEl.textContent = file.name + ' ✓ (' + pdf.numPages + ' pages, ' + extractedPdfText.length.toLocaleString() + ' characters extracted)';
+      }
     } catch(err) {
-      document.getElementById('fileName').textContent = 'Error reading PDF — ' + err.message;
+      fileNameEl.textContent = file.name + ' — extraction failed: ' + err.message + '. Paste brief as text instead.';
       extractedPdfText = null;
     }
   });
