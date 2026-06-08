@@ -27,9 +27,13 @@ async function fetchGoogleReviews(url) {
   const cid = extractCid(url);
   const keyword = extractBusinessName(url) || 'business';
 
-  const taskBody = cid
-    ? { cid: cid, depth: 100, priority: 2 }
-    : { keyword: keyword, location_code: 2840, language_code: 'en', depth: 100, priority: 2 };
+  const taskBody = {
+    keyword: cid ? 'cid:' + cid : keyword,
+    location_code: 2840,
+    language_code: 'en',
+    depth: 100,
+    priority: 2
+  };
 
   const postResp = await fetch('https://api.dataforseo.com/v3/business_data/google/reviews/task_post', {
     method: 'POST',
