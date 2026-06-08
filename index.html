@@ -748,7 +748,7 @@
 
     const briefContext = document.getElementById('briefText').value.trim() || (extractedPdfText || '');
 
-    const systemPrompt = 'You are a senior brand strategist and creative director. Given a brand hypothesis and brief context, generate a complete brand build-out.\n\nReturn ONLY valid JSON, no markdown, no preamble:\n{\n  "voice": {\n    "headline": "A punchy homepage headline (8-12 words max)",\n    "tagline": "A short brand tagline (5-7 words)",\n    "about": "A 3-4 sentence About section written in the brand voice"\n  },\n  "visual": {\n    "palette": [\n      { "name": "Color name", "hex": "#xxxxxx", "role": "Primary / Secondary / Accent / Background / Text" },\n      { "name": "Color name", "hex": "#xxxxxx", "role": "..." },\n      { "name": "Color name", "hex": "#xxxxxx", "role": "..." },\n      { "name": "Color name", "hex": "#xxxxxx", "role": "..." },\n      { "name": "Color name", "hex": "#xxxxxx", "role": "..." }\n    ],\n    "fonts": [\n      {\n        "pairing": "Pairing name (e.g. \'Editorial Authority\')",\n        "display": "Display font name (a real Google Font)",\n        "body": "Body font name (a real Google Font)",\n        "displaySample": "A sample headline in the display font voice",\n        "bodySample": "A sample sentence in the body font voice"\n      },\n      {\n        "pairing": "Pairing name",\n        "display": "Display font name",\n        "body": "Body font name",\n        "displaySample": "A sample headline",\n        "bodySample": "A sample sentence"\n      }\n    ],\n    "toneWords": ["word1", "word2", "word3", "word4", "word5"],\n    "avoid": "One sentence describing what this brand should visually and tonally avoid."\n  },\n  "elevator": "A 30-second elevator pitch for this brand position, written as if spoken aloud.",\n  "mobbinPrompt": "A detailed prompt for searching Mobbin for relevant design inspiration. Write it as a direct instruction to Claude Desktop with Mobbin connected. Include: the brand position and tone, the specific UI screens and flows to search for (e.g. onboarding, hero sections, navigation, pricing pages), the visual mood and aesthetic direction, the color and typography personality, and what to look for in terms of layout and interaction patterns. Be specific enough that the Mobbin search returns genuinely relevant results for this brand position. Write it as 3-4 paragraphs of clear instruction, not a list."\n}';
+    const systemPrompt = 'You are a senior brand strategist and creative director. Given a brand hypothesis and brief context, generate a visual brand direction.\n\nReturn ONLY valid JSON, no markdown, no preamble:\n{\n  "visual": {\n    "palette": [\n      { "name": "Color name", "hex": "#xxxxxx", "role": "Primary / Secondary / Accent / Background / Text" },\n      { "name": "Color name", "hex": "#xxxxxx", "role": "..." },\n      { "name": "Color name", "hex": "#xxxxxx", "role": "..." },\n      { "name": "Color name", "hex": "#xxxxxx", "role": "..." },\n      { "name": "Color name", "hex": "#xxxxxx", "role": "..." }\n    ],\n    "fonts": [\n      {\n        "pairing": "Pairing name (e.g. \'Editorial Authority\')",\n        "display": "Display font name (a real Google Font)",\n        "body": "Body font name (a real Google Font)",\n        "displaySample": "A sample headline in the display font voice",\n        "bodySample": "A sample sentence in the body font voice"\n      },\n      {\n        "pairing": "Pairing name",\n        "display": "Display font name",\n        "body": "Body font name",\n        "displaySample": "A sample headline",\n        "bodySample": "A sample sentence"\n      }\n    ],\n    "toneWords": ["word1", "word2", "word3", "word4", "word5"],\n    "avoid": "One sentence describing what this brand should visually and tonally avoid."\n  },\n  "mobbinPrompt": "A detailed prompt for searching Mobbin for relevant design inspiration. Write it as a direct instruction to Claude Desktop with Mobbin connected. Include: the brand position and tone, the specific UI screens and flows to search for (e.g. onboarding, hero sections, navigation, pricing pages), the visual mood and aesthetic direction, the color and typography personality, and what to look for in terms of layout and interaction patterns. Be specific enough that the Mobbin search returns genuinely relevant results for this brand position. Write it as 3-4 paragraphs of clear instruction, not a list."\n}';
 
     const userMessage = 'Brand hypothesis:\nTitle: ' + card.title + '\nTag: ' + (card.tag || '') + '\nHypothesis: ' + card.hypothesis + '\nWhy: ' + card.why + '\n\nBrief context:\n' + (briefContext || 'Not provided') + '\n\nGenerate the full brand build-out.';
 
@@ -783,19 +783,9 @@
         '<span class="build-output-title">' + card.title + '</span>' +
       '</div><div class="build-sections">';
 
-      // 1. Brand Voice
+      // 1. Visual Direction — palette
       html += '<div class="build-section">' +
-        '<div class="build-section-label">Brand Voice</div>' +
-        '<div class="build-section-content">' +
-          '<div style="font-size:22px;color:#e8e4dc;margin-bottom:10px;line-height:1.3;">' + parsed.voice.headline + '</div>' +
-          '<div style="font-size:15px;color:#a8a49c;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:20px;">' + parsed.voice.tagline + '</div>' +
-          '<div style="font-size:16px;line-height:1.8;color:#c8c4bc;">' + parsed.voice.about + '</div>' +
-        '</div>' +
-      '</div>';
-
-      // 2. Visual Direction — palette
-      html += '<div class="build-section">' +
-        '<div class="build-section-label">Visual Direction — Color Palette</div>' +
+        '<div class="build-section-label">Color Palette</div>' +
         '<div class="color-palette">';
       parsed.visual.palette.forEach(function(c) {
         html += '<div class="color-swatch-wrap">' +
@@ -807,19 +797,6 @@
       });
       html += '</div>';
 
-      // Fonts
-      html += '<div class="build-section-label" style="margin-top:24px;">Typography Pairings</div>' +
-        '<div class="font-pairings">';
-      parsed.visual.fonts.forEach(function(f) {
-        html += '<div class="font-pairing">' +
-          '<div class="font-pairing-label">' + f.pairing + '</div>' +
-          '<div class="font-display-sample">' + f.displaySample + '</div>' +
-          '<div class="font-body-sample">' + f.bodySample + '</div>' +
-          '<div class="font-meta">' + f.display + ' (display) · ' + f.body + ' (body)</div>' +
-        '</div>';
-      });
-      html += '</div>';
-
       // Tone words + avoid
       html += '<div style="margin-top:20px;display:flex;gap:8px;flex-wrap:wrap;">';
       parsed.visual.toneWords.forEach(function(w) {
@@ -827,21 +804,58 @@
       });
       html += '</div>';
       html += '<div style="margin-top:16px;font-size:14px;color:#6a6560;line-height:1.6;"><em>Avoid: ' + parsed.visual.avoid + '</em></div>';
-      html += '</div>'; // close visual section
+      html += '</div>';
 
-      // 3. Elevator Pitch
+      // 2. Typography — load actual Google Fonts and render samples in them
+      var fontLinks = '';
+      parsed.visual.fonts.forEach(function(f) {
+        fontLinks += '<link href="https://fonts.googleapis.com/css2?family=' +
+          encodeURIComponent(f.display).replace(/%20/g, '+') + ':wght@400;700&family=' +
+          encodeURIComponent(f.body).replace(/%20/g, '+') + ':wght@400;500&display=swap" rel="stylesheet">';
+      });
+
       html += '<div class="build-section">' +
-        '<div class="build-section-label">Elevator Pitch</div>' +
-        '<div class="build-section-content" style="font-style:italic;">' + parsed.elevator + '</div>' +
-      '</div>';
+        '<div class="build-section-label">Typography Pairings</div>' +
+        fontLinks +
+        '<div class="font-pairings">';
+      parsed.visual.fonts.forEach(function(f) {
+        html += '<div class="font-pairing">' +
+          '<div class="font-pairing-label">' + f.pairing + '</div>' +
+          '<div class="font-display-sample" style="font-family:\'' + f.display + '\', Georgia, serif;">' + f.displaySample + '</div>' +
+          '<div class="font-body-sample" style="font-family:\'' + f.body + '\', Georgia, serif;">' + f.bodySample + '</div>' +
+          '<div class="font-meta">' + f.display + ' (display) · ' + f.body + ' (body)</div>' +
+        '</div>';
+      });
+      html += '</div></div>';
 
-      // 4. Mobbin Prompt
+      // 3. Mobbin Prompt
       html += '<div class="build-section">' +
         '<div class="build-section-label">Mobbin Search Prompt</div>' +
         '<div class="build-section-content">' +
           '<div style="font-size:14px;color:#a8a49c;margin-bottom:16px;">Copy this prompt and give it to Claude Desktop with your Mobbin tool connected.</div>' +
           '<div id="mobbinPrompt' + cardIndex + '" style="font-size:15px;line-height:1.8;color:#c8c4bc;background:#0f0f0f;border:1px solid #2a2a2a;border-radius:2px;padding:20px;white-space:pre-wrap;">' + parsed.mobbinPrompt + '</div>' +
           '<button onclick="(function(){ var t = document.getElementById(\'mobbinPrompt' + cardIndex + '\').textContent; navigator.clipboard.writeText(t); this.textContent=\'Copied\'; var b=this; setTimeout(function(){b.textContent=\'Copy Prompt\';},2000); }).call(this)" style="margin-top:12px;background:transparent;color:#c8c4bc;border:1px solid #3a3a3a;font-family:\'Georgia\',serif;font-size:13px;letter-spacing:0.12em;text-transform:uppercase;padding:10px 20px;cursor:pointer;border-radius:2px;">Copy Prompt</button>' +
+        '</div>' +
+      '</div>';
+
+      // 4. Variant.com Prompt
+      var variantPrompt = 'I am working on a brand positioning project. Here is everything we have established about this brand direction:\n\n' +
+        'Position: ' + card.title + '\n' +
+        'Tag: ' + (card.tag || '') + '\n' +
+        'Hypothesis: ' + card.hypothesis + '\n' +
+        'Strategic rationale: ' + card.why + '\n\n' +
+        'Color palette:\n' + parsed.visual.palette.map(function(c){ return '- ' + c.name + ' ' + c.hex + ' (' + c.role + ')'; }).join('\n') + '\n\n' +
+        'Typography:\n' + parsed.visual.fonts.map(function(f){ return '- ' + f.pairing + ': ' + f.display + ' (display) paired with ' + f.body + ' (body)'; }).join('\n') + '\n\n' +
+        'Tone: ' + parsed.visual.toneWords.join(', ') + '\n' +
+        'Avoid: ' + parsed.visual.avoid + '\n\n' +
+        'Using this brand direction, create 3 distinct visual website concept directions in Variant. Each concept should express the same brand position but explore a different visual execution — different layout approach, different use of color, different typographic hierarchy. Make them genuinely different from each other, not variations of the same layout. Use the actual hex colors and font names specified above.';
+
+      html += '<div class="build-section">' +
+        '<div class="build-section-label">Variant.com Prompt</div>' +
+        '<div class="build-section-content">' +
+          '<div style="font-size:14px;color:#a8a49c;margin-bottom:16px;">Copy this prompt into Variant.com to generate visual website concepts for this position.</div>' +
+          '<div id="variantPrompt' + cardIndex + '" style="font-size:15px;line-height:1.8;color:#c8c4bc;background:#0f0f0f;border:1px solid #2a2a2a;border-radius:2px;padding:20px;white-space:pre-wrap;">' + variantPrompt + '</div>' +
+          '<button onclick="(function(){ var t = document.getElementById(\'variantPrompt' + cardIndex + '\').textContent; navigator.clipboard.writeText(t); this.textContent=\'Copied\'; var b=this; setTimeout(function(){b.textContent=\'Copy Prompt\';},2000); }).call(this)" style="margin-top:12px;background:transparent;color:#c8c4bc;border:1px solid #3a3a3a;font-family:\'Georgia\',serif;font-size:13px;letter-spacing:0.12em;text-transform:uppercase;padding:10px 20px;cursor:pointer;border-radius:2px;">Copy Prompt</button>' +
         '</div>' +
       '</div>';
 
