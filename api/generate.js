@@ -13,8 +13,9 @@ const DFS_AUTH = 'Basic ' + Buffer.from(
 
 function extractCid(url) {
   const match = url.match(/0x[0-9a-f]+:0x([0-9a-f]+)/i);
-  if (match) return parseInt(match[1], 16).toString();
-  return null;
+  if (!match) return null;
+  // Use BigInt to avoid floating point precision loss on large hex numbers
+  return BigInt('0x' + match[1]).toString();
 }
 
 function extractBusinessName(url) {
@@ -29,8 +30,8 @@ async function fetchGoogleReviews(url) {
 
   const taskBody = {
     keyword: cid ? 'cid:' + cid : keyword,
-    location_code: 2840,
-    language_code: 'en',
+    location_name: 'United States',
+    language_name: 'English',
     depth: 100,
     priority: 2
   };
@@ -46,7 +47,7 @@ async function fetchGoogleReviews(url) {
 
   const postData = await postResp.json();
   if (!postData.tasks || !postData.tasks[0] || postData.tasks[0].status_code !== 20100) {
-    throw new Error('Task post failed: ' + JSON.stringify(postData.tasks?.[0]?.status_message || postData));
+    throw new Error('Task post failed: ' + JSON.stringify(postData.tasks && postData.tasks[0] && postData.tasks[0].status_message));
   }
 
   const taskId = postData.tasks[0].id;
@@ -67,10 +68,11 @@ async function fetchGoogleReviews(url) {
       break;
     }
     if (attempt === maxAttempts - 1) {
-      throw new Error('Task timed out: ' + (task.status_message || 'no result after 45 seconds'));
+      throw new Error('Task timed out after 45 seconds');
     }
   }
-  if (items.length === 0) throw new Error('No reviews found. Task body sent: ' + JSON.stringify(taskBody));
+
+  if (items.length === 0) throw new Error('No reviews found for this business');
 
   return items.map(function(item) {
     return (item.profile_name || 'Reviewer') + ': ' + (item.review_text || '');
