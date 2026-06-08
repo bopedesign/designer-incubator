@@ -70,7 +70,7 @@ async function fetchGoogleReviews(url) {
       throw new Error('Task timed out: ' + (task.status_message || 'no result after 45 seconds'));
     }
   }
-  if (items.length === 0) throw new Error('No reviews found for this business');
+  if (items.length === 0) throw new Error('No reviews found. Task body sent: ' + JSON.stringify(taskBody));
 
   return items.map(function(item) {
     return (item.profile_name || 'Reviewer') + ': ' + (item.review_text || '');
