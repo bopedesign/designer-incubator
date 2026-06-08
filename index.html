@@ -562,7 +562,7 @@
     const btn = document.getElementById(btnId);
     const status = document.getElementById(statusId);
     btn.disabled = true;
-    status.textContent = 'Fetching reviews…';
+    status.textContent = 'Fetching reviews… (may take up to 45 seconds)';
 
     try {
       const response = await fetch('/api/generate', {
