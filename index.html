@@ -342,13 +342,11 @@ Rules: exploration_axes are fundamental strategic dimensions. Each hypothesis is
   const userMsg = `Brief: ${brief}${brainstorm ? '\n\nBrainstorm mode ON — wide net first, then select the ' + count + ' with widest spread.' : ''}\n\nGenerate ${count} distinct design hypotheses.`;
 
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await fetch('/api/generate', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-allow-browser': 'true'
       },
       body: JSON.stringify({ model: 'claude-sonnet-4-20250514', max_tokens: 2500, system, messages: [{ role: 'user', content: userMsg }] })
     });
