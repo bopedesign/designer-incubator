@@ -326,22 +326,12 @@
 
   <div class="review-fields">
     <div class="input-section">
-      <label for="clientReviewUrl">Client Google Maps URL</label>
-      <div class="url-row">
-        <input type="url" id="clientReviewUrl" placeholder="https://www.google.com/maps/place/…">
-        <button class="btn-small" id="fetchClientBtn" onclick="fetchReviews('client')">Fetch</button>
-      </div>
-      <div class="fetch-status" id="clientReviewStatus"></div>
-      <textarea id="clientReviews" rows="5" placeholder="Reviews will appear here after fetching…" style="margin-top:10px;"></textarea>
+      <label for="clientReviews">Client Reviews</label>
+      <textarea id="clientReviews" rows="8" placeholder="Paste your client's Google reviews here…"></textarea>
     </div>
     <div class="input-section">
-      <label for="competitorReviewUrl">Competitor Google Maps URL</label>
-      <div class="url-row">
-        <input type="url" id="competitorReviewUrl" placeholder="https://www.google.com/maps/place/…">
-        <button class="btn-small" id="fetchCompetitorBtn" onclick="fetchReviews('competitor')">Fetch</button>
-      </div>
-      <div class="fetch-status" id="competitorReviewStatus"></div>
-      <textarea id="competitorReviews" rows="5" placeholder="Reviews will appear here after fetching…" style="margin-top:10px;"></textarea>
+      <label for="competitorReviews">Competitor Reviews</label>
+      <textarea id="competitorReviews" rows="8" placeholder="Paste competitor Google reviews here…"></textarea>
     </div>
   </div>
 
@@ -468,21 +458,49 @@
     const status = document.getElementById(statusId);
     btn.disabled = true;
     status.className = 'fetch-status';
-    status.textContent = 'Fetching reviews… (may take up to 45 seconds)';
+    status.textContent = 'Creating task…';
 
     try {
-      const response = await fetch('/api/generate', {
+      // Step 1: Create the task
+      const createResp = await fetch('/api/generate', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'fetch_reviews', url: url })
+        body: JSON.stringify({ action: 'create_review_task', url: url })
       });
-      const raw = await response.text();
-      let data;
-      try { data = JSON.parse(raw); } catch(e) { throw new Error(raw.substring(0, 200)); }
-      if (data.error) throw new Error(data.error);
-      document.getElementById(textareaId).value = data.reviews;
-      const count = data.reviews.split('\n\n').length;
-      status.textContent = count + ' reviews fetched.';
+      const createRaw = await createResp.text();
+      let createData;
+      try { createData = JSON.parse(createRaw); } catch(e) { throw new Error(createRaw.substring(0, 200)); }
+      if (createData.error) throw new Error(createData.error);
+      const taskId = createData.taskId;
+
+      // Step 2: Poll for results
+      let attempts = 0;
+      const maxAttempts = 20;
+      while (attempts < maxAttempts) {
+        await new Promise(resolve => setTimeout(resolve, 3000));
+        attempts++;
+        status.textContent = 'Waiting for results… (' + (attempts * 3) + 's)';
+
+        const getResp = await fetch('/api/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ action: 'get_review_task', taskId: taskId })
+        });
+        const getRaw = await getResp.text();
+        let getData;
+        try { getData = JSON.parse(getRaw); } catch(e) { throw new Error(getRaw.substring(0, 200)); }
+        if (getData.error) throw new Error(getData.error);
+
+        if (getData.ready) {
+          if (!getData.reviews) throw new Error('No reviews found for this business');
+          document.getElementById(textareaId).value = getData.reviews;
+          const count = getData.reviews.split('\n\n').length;
+          status.textContent = count + ' reviews fetched.';
+          btn.disabled = false;
+          return;
+        }
+      }
+      throw new Error('Timed out waiting for reviews');
     } catch(err) {
       status.className = 'fetch-status error';
       status.textContent = 'Error: ' + err.message;
