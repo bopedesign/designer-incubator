@@ -29,18 +29,7 @@
   .api-status.unset { background: #FEF0EC; color: #993C1D; }
   .brief-section { margin-bottom: 1.5rem; }
   .section-label { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 10px; display: block; }
-
-  .upload-zone {
-    border: 1.5px dashed var(--border-mid);
-    border-radius: 10px;
-    padding: 1.5rem;
-    text-align: center;
-    cursor: pointer;
-    transition: border-color 0.15s, background 0.15s;
-    background: var(--surface);
-    margin-bottom: 10px;
-    position: relative;
-  }
+  .upload-zone { border: 1.5px dashed var(--border-mid); border-radius: 10px; padding: 1.5rem; text-align: center; cursor: pointer; transition: border-color 0.15s, background 0.15s; background: var(--surface); margin-bottom: 10px; position: relative; }
   .upload-zone:hover { border-color: rgba(0,0,0,0.3); background: #FAFAF8; }
   .upload-zone.dragover { border-color: #1A1814; background: #F0EEE9; }
   .upload-zone input[type=file] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
@@ -48,30 +37,16 @@
   .upload-text { font-size: 13px; color: var(--text-secondary); }
   .upload-text strong { color: var(--text-primary); font-weight: 500; }
   .upload-sub { font-size: 12px; color: var(--text-tertiary); margin-top: 3px; }
-
-  .file-chip {
-    display: none;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 12px;
-    background: #E8F5EE;
-    border-radius: 6px;
-    margin-bottom: 10px;
-    font-size: 13px;
-    color: #1A6B3A;
-  }
+  .file-chip { display: none; align-items: center; gap: 8px; padding: 8px 12px; background: #E8F5EE; border-radius: 6px; margin-bottom: 10px; font-size: 13px; color: #1A6B3A; }
   .file-chip.visible { display: flex; }
   .file-chip-name { flex: 1; font-weight: 500; }
   .file-chip-remove { cursor: pointer; color: #1A6B3A; opacity: 0.6; background: none; border: none; font-size: 16px; line-height: 1; padding: 0; font-family: var(--sans); }
   .file-chip-remove:hover { opacity: 1; }
-
   .or-divider { display: flex; align-items: center; gap: 10px; margin: 10px 0; color: var(--text-tertiary); font-size: 12px; text-transform: uppercase; letter-spacing: 0.08em; }
   .or-divider::before, .or-divider::after { content: ''; flex: 1; height: 0.5px; background: var(--border-mid); }
-
   textarea { width: 100%; min-height: 120px; padding: 1rem 1.25rem; font-family: var(--sans); font-size: 15px; color: var(--text-primary); background: var(--surface); border: 0.5px solid var(--border-mid); border-radius: 10px; resize: vertical; line-height: 1.65; transition: border-color 0.15s; }
   textarea:focus { outline: none; border-color: rgba(0,0,0,0.3); }
   textarea::placeholder { color: var(--text-tertiary); }
-
   .controls { display: flex; align-items: center; gap: 1.5rem; margin-top: 1rem; flex-wrap: wrap; }
   .toggle-wrap { display: flex; align-items: center; gap: 8px; cursor: pointer; user-select: none; }
   .toggle-wrap input[type=checkbox] { width: 15px; height: 15px; accent-color: #1A1814; cursor: pointer; }
@@ -83,7 +58,6 @@
   .generate-btn:hover { opacity: 0.85; }
   .generate-btn:active { transform: scale(0.98); }
   .generate-btn:disabled { opacity: 0.35; cursor: not-allowed; transform: none; }
-
   .loading { display: none; flex-direction: column; align-items: center; padding: 5rem 0; gap: 1.5rem; }
   .loading.visible { display: flex; }
   .loading-text { font-family: var(--serif); font-style: italic; font-size: 18px; color: var(--text-secondary); }
@@ -92,12 +66,11 @@
   .dot:nth-child(2) { animation-delay: 0.2s; }
   .dot:nth-child(3) { animation-delay: 0.4s; }
   @keyframes pulse { 0%,80%,100% { opacity:0.25; transform:scale(0.75); } 40% { opacity:1; transform:scale(1); } }
-
   .results { display: none; }
   .results.visible { display: block; }
   .results-meta { margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 0.5px solid var(--border); display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; }
   .results-brief { font-size: 13px; color: var(--text-secondary); line-height: 1.5; max-width: 600px; }
-  .new-brief-btn { font-family: var(--sans); font-size: 13px; color: var(--text-secondary); background: none; border: 0.5px solid var(--border-mid); border-radius: 6px; padding: 6px 14px; cursor: pointer; white-space: nowrap; transition: border-color 0.15s; }
+  .new-brief-btn { font-family: var(--sans); font-size: 13px; color: var(--text-secondary); background: none; border: 0.5px solid var(--border-mid); border-radius: 6px; padding: 6px 14px; cursor: pointer; white-space: nowrap; }
   .new-brief-btn:hover { border-color: rgba(0,0,0,0.25); color: var(--text-primary); }
   .axes-row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 2rem; }
   .axis-tag { font-size: 12px; padding: 4px 12px; border-radius: 999px; border: 0.5px solid var(--border-mid); color: var(--text-secondary); background: var(--surface); }
@@ -125,7 +98,6 @@
   .back-link { display: inline-block; margin-bottom: 1.5rem; font-size: 13px; color: var(--text-secondary); cursor: pointer; text-decoration: underline; text-underline-offset: 3px; background: none; border: none; font-family: var(--sans); }
   .back-link:hover { color: var(--text-primary); }
   .axes-label { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-tertiary); margin-bottom: 8px; display: block; }
-  .extracting-msg { font-size: 13px; color: var(--text-secondary); font-style: italic; padding: 8px 0; }
 </style>
 </head>
 <body>
@@ -142,26 +114,20 @@
   <div id="input-phase">
     <div class="brief-section">
       <span class="section-label">Design brief</span>
-
       <div class="upload-zone" id="upload-zone" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event)">
         <input type="file" accept=".pdf,.txt,.md" onchange="handleFileSelect(event)">
         <div class="upload-icon">⬆</div>
         <div class="upload-text"><strong>Upload a brief</strong> — drag & drop or click</div>
         <div class="upload-sub">PDF, TXT, or MD</div>
       </div>
-
       <div class="file-chip" id="file-chip">
         <span>📄</span>
         <span class="file-chip-name" id="file-chip-name"></span>
         <button class="file-chip-remove" onclick="removeFile()">×</button>
       </div>
-
       <div class="or-divider">or type below</div>
-
       <textarea id="brief" placeholder="Describe the problem, the user, and the opportunity. The more specific, the more distinct the hypotheses."></textarea>
-      <div class="extracting-msg" id="extracting-msg" style="display:none">Reading document...</div>
     </div>
-
     <div class="controls">
       <label class="toggle-wrap">
         <input type="checkbox" id="brainstorm">
@@ -209,7 +175,6 @@ const BADGES = [
 ];
 const LOADING_MSGS = ['Mapping the solution space...','Identifying exploration axes...','Diverging across dimensions...','Placing distinct bets...','Shaping hypotheses...'];
 let loadingInterval;
-let pdfContent = null;
 
 function updateApiStatus() {
   const key = document.getElementById('api-key').value.trim();
@@ -222,7 +187,7 @@ function updateApiStatus() {
 }
 
 function handleDragOver(e) { e.preventDefault(); document.getElementById('upload-zone').classList.add('dragover'); }
-function handleDragLeave(e) { document.getElementById('upload-zone').classList.remove('dragover'); }
+function handleDragLeave() { document.getElementById('upload-zone').classList.remove('dragover'); }
 function handleDrop(e) {
   e.preventDefault();
   document.getElementById('upload-zone').classList.remove('dragover');
@@ -233,10 +198,8 @@ function handleFileSelect(e) { const file = e.target.files[0]; if (file) process
 
 async function processFile(file) {
   const ext = file.name.split('.').pop().toLowerCase();
-  document.getElementById('extracting-msg').style.display = 'block';
   document.getElementById('file-chip-name').textContent = file.name;
   document.getElementById('file-chip').classList.add('visible');
-
   try {
     if (ext === 'pdf') {
       const arrayBuffer = await file.arrayBuffer();
@@ -247,21 +210,16 @@ async function processFile(file) {
         const content = await page.getTextContent();
         text += content.items.map(item => item.str).join(' ') + '\n';
       }
-      pdfContent = text.trim();
-      document.getElementById('brief').value = pdfContent;
+      document.getElementById('brief').value = text.trim();
     } else {
-      const text = await file.text();
-      pdfContent = text.trim();
-      document.getElementById('brief').value = pdfContent;
+      document.getElementById('brief').value = await file.text();
     }
   } catch(err) {
     showError('Could not read file: ' + err.message);
   }
-  document.getElementById('extracting-msg').style.display = 'none';
 }
 
 function removeFile() {
-  pdfContent = null;
   document.getElementById('file-chip').classList.remove('visible');
   document.getElementById('brief').value = '';
   document.querySelector('#upload-zone input[type=file]').value = '';
@@ -348,11 +306,16 @@ Rules: exploration_axes are fundamental strategic dimensions. Each hypothesis is
         'Content-Type': 'application/json',
         'x-api-key': apiKey,
       },
-      body: JSON.stringify({ model: 'claude-sonnet-4-5', max_tokens: 2500, system, messages: [{ role: 'user', content: userMsg }] })
+      body: JSON.stringify({
+        model: 'claude-haiku-4-5',
+        max_tokens: 2500,
+        system,
+        messages: [{ role: 'user', content: userMsg }]
+      })
     });
     const data = await res.json();
     stopLoading();
-    if (data.error) throw new Error(data.error.message);
+    if (data.error) throw new Error(typeof data.error === 'object' ? data.error.message : data.error);
     const raw = data.content.find(b => b.type === 'text')?.text || '';
     const parsed = JSON.parse(raw.replace(/```json|```/g, '').trim());
     renderResults(brief, parsed);
