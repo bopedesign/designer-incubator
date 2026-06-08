@@ -389,12 +389,22 @@
 
     <div class="review-fields">
       <div class="input-section">
-        <label for="clientReviews">Client Reviews</label>
-        <textarea id="clientReviews" rows="12" placeholder="Paste your client's Google reviews here…"></textarea>
+        <label for="clientReviewUrl">Client Google Maps URL</label>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <input type="url" id="clientReviewUrl" placeholder="https://www.google.com/maps/place/…" style="flex:1;background:#1a1a1a;border:1px solid #3a3a3a;color:#e8e4dc;font-family:Georgia,serif;font-size:15px;padding:12px 14px;outline:none;border-radius:2px;">
+          <button class="btn-secondary" onclick="fetchReviews('client')" id="fetchClientBtn" style="padding:12px 16px;font-size:13px;">Fetch</button>
+        </div>
+        <div id="clientReviewStatus" style="font-size:13px;color:#a8a49c;margin-top:8px;min-height:18px;"></div>
+        <textarea id="clientReviews" rows="6" placeholder="Reviews will appear here after fetching…" style="margin-top:10px;"></textarea>
       </div>
       <div class="input-section">
-        <label for="competitorReviews">Competitor Reviews</label>
-        <textarea id="competitorReviews" rows="12" placeholder="Paste competitor Google reviews here…"></textarea>
+        <label for="competitorReviewUrl">Competitor Google Maps URL</label>
+        <div style="display:flex;gap:10px;align-items:flex-start;">
+          <input type="url" id="competitorReviewUrl" placeholder="https://www.google.com/maps/place/…" style="flex:1;background:#1a1a1a;border:1px solid #3a3a3a;color:#e8e4dc;font-family:Georgia,serif;font-size:15px;padding:12px 14px;outline:none;border-radius:2px;">
+          <button class="btn-secondary" onclick="fetchReviews('competitor')" id="fetchCompetitorBtn" style="padding:12px 16px;font-size:13px;">Fetch</button>
+        </div>
+        <div id="competitorReviewStatus" style="font-size:13px;color:#a8a49c;margin-top:8px;min-height:18px;"></div>
+        <textarea id="competitorReviews" rows="6" placeholder="Reviews will appear here after fetching…" style="margin-top:10px;"></textarea>
       </div>
     </div>
 
@@ -538,6 +548,38 @@
     }
 
     document.getElementById('generateBtn').disabled = false;
+  }
+
+  async function fetchReviews(type) {
+    const urlId = type === 'client' ? 'clientReviewUrl' : 'competitorReviewUrl';
+    const textareaId = type === 'client' ? 'clientReviews' : 'competitorReviews';
+    const statusId = type === 'client' ? 'clientReviewStatus' : 'competitorReviewStatus';
+    const btnId = type === 'client' ? 'fetchClientBtn' : 'fetchCompetitorBtn';
+
+    const url = document.getElementById(urlId).value.trim();
+    if (!url) { alert('Please enter a Google Maps URL.'); return; }
+
+    const btn = document.getElementById(btnId);
+    const status = document.getElementById(statusId);
+    btn.disabled = true;
+    status.textContent = 'Fetching reviews…';
+
+    try {
+      const response = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'fetch_reviews', url: url })
+      });
+      const data = await response.json();
+      if (data.error) throw new Error(data.error);
+      document.getElementById(textareaId).value = data.reviews;
+      const count = data.reviews.split('\n\n').length;
+      status.textContent = count + ' reviews fetched.';
+    } catch(err) {
+      status.style.color = '#d87060';
+      status.textContent = 'Error: ' + err.message;
+    }
+    btn.disabled = false;
   }
 
   async function rankHypotheses() {
