@@ -313,6 +313,181 @@
   }
 
   .hidden { display: none; }
+
+  /* BUILD THIS POSITION */
+  .btn-build {
+    display: block;
+    width: calc(100% - 48px);
+    margin: 16px 24px 24px;
+    background: transparent;
+    color: #c8c4bc;
+    border: 1px solid #3a3a3a;
+    font-family: 'Georgia', serif;
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 12px 20px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: border-color 0.2s, color 0.2s;
+    text-align: center;
+  }
+
+  .btn-build:hover { border-color: #c8c4bc; color: #e8e4dc; }
+  .btn-build:disabled { color: #5a5a5a; border-color: #2a2a2a; cursor: not-allowed; }
+  .btn-build.building { color: #a8a49c; border-color: #3a3a3a; cursor: not-allowed; }
+
+  /* BUILD OUTPUTS STACK */
+  .build-outputs { margin-top: 48px; }
+
+  .build-output {
+    background: #141414;
+    border: 1px solid #2a2a2a;
+    border-radius: 2px;
+    margin-bottom: 2px;
+    overflow: hidden;
+  }
+
+  .build-output-header {
+    padding: 20px 24px;
+    border-bottom: 1px solid #2a2a2a;
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+  }
+
+  .build-output-label {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #6a6560;
+    flex-shrink: 0;
+  }
+
+  .build-output-title {
+    font-size: 17px;
+    color: #e8e4dc;
+  }
+
+  .build-sections { padding: 0; }
+
+  .build-section {
+    border-bottom: 1px solid #2a2a2a;
+    padding: 28px 24px;
+  }
+
+  .build-section:last-child { border-bottom: none; }
+
+  .build-section-label {
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: #6a6560;
+    margin-bottom: 16px;
+  }
+
+  .build-section-content {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #c8c4bc;
+  }
+
+  /* COLOR PALETTE */
+  .color-palette {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+  }
+
+  .color-swatch-wrap { display: flex; flex-direction: column; align-items: center; gap: 8px; }
+
+  .color-swatch {
+    width: 64px;
+    height: 64px;
+    border-radius: 2px;
+    border: 1px solid #3a3a3a;
+    flex-shrink: 0;
+  }
+
+  .color-swatch-name {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #a8a49c;
+    text-align: center;
+  }
+
+  .color-swatch-hex {
+    font-size: 12px;
+    color: #6a6560;
+    font-family: monospace;
+    text-align: center;
+  }
+
+  /* FONT PAIRINGS */
+  .font-pairings { display: flex; flex-direction: column; gap: 20px; }
+
+  .font-pairing {
+    border: 1px solid #2a2a2a;
+    border-radius: 2px;
+    padding: 20px;
+  }
+
+  .font-pairing-label {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: #6a6560;
+    margin-bottom: 12px;
+  }
+
+  .font-display-sample {
+    font-size: 26px;
+    color: #e8e4dc;
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+
+  .font-body-sample {
+    font-size: 15px;
+    color: #a8a49c;
+    line-height: 1.7;
+  }
+
+  .font-meta {
+    font-size: 12px;
+    color: #5a5560;
+    margin-top: 10px;
+    letter-spacing: 0.05em;
+  }
+
+  /* HOMEPAGE LAUNCH */
+  .btn-homepage {
+    display: inline-block;
+    margin-top: 16px;
+    background: #e8e4dc;
+    color: #0f0f0f;
+    border: none;
+    font-family: 'Georgia', serif;
+    font-size: 13px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 12px 24px;
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background 0.2s;
+    text-decoration: none;
+  }
+
+  .btn-homepage:hover { background: #ffffff; }
+
+  .build-status {
+    font-size: 14px;
+    color: #a8a49c;
+    font-style: italic;
+    padding: 20px 24px;
+  }
 </style>
 </head>
 <body>
@@ -380,6 +555,13 @@
     </div>
   </div>
 
+  <!-- BUILD OUTPUTS (stacking) -->
+  <div class="build-outputs hidden" id="buildOutputs">
+    <hr class="divider">
+    <div class="section-label" style="margin-bottom: 24px;">Built Positions</div>
+    <div id="buildStack"></div>
+  </div>
+
 </div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -438,7 +620,8 @@
         '</div>' +
         '<div class="tab-content active" data-tab="hypothesis">' + card.hypothesis + '</div>' +
         '<div class="tab-content" data-tab="why">' + card.why + '</div>' +
-        '<div class="tab-content" data-tab="measurements">' + card.measurements + '</div>';
+        '<div class="tab-content" data-tab="measurements">' + card.measurements + '</div>' +
+        '<button class="btn-build" id="buildBtn' + i + '" onclick="buildPosition(' + i + ')">Build This Position</button>';
       grid.appendChild(el);
     });
     grid.classList.remove('hidden');
@@ -560,7 +743,475 @@
     document.getElementById('generateBtn').disabled = false;
   }
 
-  async function rankHypotheses() {
+  async function buildPosition(cardIndex) {
+    const apiKey = document.getElementById('apiKey').value.trim();
+    if (!apiKey) { alert('Please enter your API key.'); return; }
+
+    const card = generatedCards[cardIndex];
+    const btn = document.getElementById('buildBtn' + cardIndex);
+    btn.disabled = true;
+    btn.classList.add('building');
+    btn.textContent = 'Building…';
+
+    // Show the build outputs section
+    const buildOutputs = document.getElementById('buildOutputs');
+    buildOutputs.classList.remove('hidden');
+    const buildStack = document.getElementById('buildStack');
+
+    // Add a placeholder while building
+    const placeholder = document.createElement('div');
+    placeholder.className = 'build-output';
+    placeholder.id = 'buildPlaceholder' + cardIndex;
+    placeholder.innerHTML = '<div class="build-status">Building position: ' + card.title + '…</div>';
+    buildStack.appendChild(placeholder);
+    placeholder.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    const briefContext = document.getElementById('briefText').value.trim() || (extractedPdfText || '');
+
+    const systemPrompt = `You are a senior brand strategist and creative director. Given a brand hypothesis and brief context, generate a complete brand build-out with four sections.
+
+Return ONLY valid JSON, no markdown, no preamble:
+{
+  "voice": {
+    "headline": "A punchy homepage headline (8-12 words max)",
+    "tagline": "A short brand tagline (5-7 words)",
+    "about": "A 3-4 sentence About section written in the brand voice"
+  },
+  "visual": {
+    "palette": [
+      { "name": "Color name", "hex": "#xxxxxx", "role": "Primary / Secondary / Accent / Background / Text" },
+      { "name": "Color name", "hex": "#xxxxxx", "role": "..." },
+      { "name": "Color name", "hex": "#xxxxxx", "role": "..." },
+      { "name": "Color name", "hex": "#xxxxxx", "role": "..." },
+      { "name": "Color name", "hex": "#xxxxxx", "role": "..." }
+    ],
+    "fonts": [
+      {
+        "pairing": "Pairing name (e.g. 'Editorial Authority')",
+        "display": "Display font name (a real Google Font)",
+        "body": "Body font name (a real Google Font)",
+        "displaySample": "A sample headline in the display font voice",
+        "bodySample": "A sample sentence in the body font voice"
+      },
+      {
+        "pairing": "Pairing name",
+        "display": "Display font name",
+        "body": "Body font name",
+        "displaySample": "A sample headline",
+        "bodySample": "A sample sentence"
+      }
+    ],
+    "toneWords": ["word1", "word2", "word3", "word4", "word5"],
+    "avoid": "One sentence describing what this brand should visually and tonally avoid."
+  },
+  "elevator": "A 30-second elevator pitch for this brand position, written as if spoken aloud.",
+  "homepage": {
+    "hero": {
+      "headline": "Hero headline",
+      "subhead": "Supporting hero subheadline (1-2 sentences)",
+      "cta": "CTA button text"
+    },
+    "sections": [
+      { "type": "proof", "heading": "Section heading", "body": "2-3 sentences of supporting copy" },
+      { "type": "differentiator", "heading": "Section heading", "body": "2-3 sentences of supporting copy" },
+      { "type": "cta", "heading": "Final CTA heading", "body": "1-2 sentences", "button": "Button text" }
+    ]
+  }
+}`;
+
+    const userMessage = 'Brand hypothesis:\nTitle: ' + card.title + '\nTag: ' + (card.tag || '') + '\nHypothesis: ' + card.hypothesis + '\nWhy: ' + card.why + '\n\nBrief context:\n' + (briefContext || 'Not provided') + '\n\nGenerate the full brand build-out.';
+
+    try {
+      const response = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-api-key': apiKey },
+        body: JSON.stringify({
+          model: 'claude-haiku-4-5-20251001',
+          max_tokens: 3000,
+          system: systemPrompt,
+          messages: [{ role: 'user', content: userMessage }]
+        })
+      });
+
+      const raw = await response.text();
+      let data;
+      try { data = JSON.parse(raw); } catch(e) { throw new Error('API returned: ' + raw.substring(0, 200)); }
+      if (data.error) throw new Error(data.error.message || JSON.stringify(data.error));
+
+      const text = data.content && data.content[0] ? data.content[0].text : '';
+      const clean = text.replace(/```json|```/g, '').trim();
+      const parsed = JSON.parse(clean);
+
+      // Build the output panel
+      const outputEl = document.createElement('div');
+      outputEl.className = 'build-output';
+
+      // Header
+      let html = '<div class="build-output-header">' +
+        '<span class="build-output-label">Built Position</span>' +
+        '<span class="build-output-title">' + card.title + '</span>' +
+      '</div><div class="build-sections">';
+
+      // 1. Brand Voice
+      html += '<div class="build-section">' +
+        '<div class="build-section-label">Brand Voice</div>' +
+        '<div class="build-section-content">' +
+          '<div style="font-size:22px;color:#e8e4dc;margin-bottom:10px;line-height:1.3;">' + parsed.voice.headline + '</div>' +
+          '<div style="font-size:15px;color:#a8a49c;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:20px;">' + parsed.voice.tagline + '</div>' +
+          '<div style="font-size:16px;line-height:1.8;color:#c8c4bc;">' + parsed.voice.about + '</div>' +
+        '</div>' +
+      '</div>';
+
+      // 2. Visual Direction — palette
+      html += '<div class="build-section">' +
+        '<div class="build-section-label">Visual Direction — Color Palette</div>' +
+        '<div class="color-palette">';
+      parsed.visual.palette.forEach(function(c) {
+        html += '<div class="color-swatch-wrap">' +
+          '<div class="color-swatch" style="background:' + c.hex + ';"></div>' +
+          '<div class="color-swatch-name">' + c.name + '</div>' +
+          '<div class="color-swatch-hex">' + c.hex + '</div>' +
+          '<div class="color-swatch-name" style="font-size:10px;">' + c.role + '</div>' +
+        '</div>';
+      });
+      html += '</div>';
+
+      // Fonts
+      html += '<div class="build-section-label" style="margin-top:24px;">Typography Pairings</div>' +
+        '<div class="font-pairings">';
+      parsed.visual.fonts.forEach(function(f) {
+        html += '<div class="font-pairing">' +
+          '<div class="font-pairing-label">' + f.pairing + '</div>' +
+          '<div class="font-display-sample">' + f.displaySample + '</div>' +
+          '<div class="font-body-sample">' + f.bodySample + '</div>' +
+          '<div class="font-meta">' + f.display + ' (display) · ' + f.body + ' (body)</div>' +
+        '</div>';
+      });
+      html += '</div>';
+
+      // Tone words + avoid
+      html += '<div style="margin-top:20px;display:flex;gap:8px;flex-wrap:wrap;">';
+      parsed.visual.toneWords.forEach(function(w) {
+        html += '<span style="font-size:12px;letter-spacing:0.12em;text-transform:uppercase;color:#a8a49c;border:1px solid #2a2a2a;padding:6px 12px;border-radius:2px;">' + w + '</span>';
+      });
+      html += '</div>';
+      html += '<div style="margin-top:16px;font-size:14px;color:#6a6560;line-height:1.6;"><em>Avoid: ' + parsed.visual.avoid + '</em></div>';
+      html += '</div>'; // close visual section
+
+      // 3. Elevator Pitch
+      html += '<div class="build-section">' +
+        '<div class="build-section-label">Elevator Pitch</div>' +
+        '<div class="build-section-content" style="font-style:italic;">' + parsed.elevator + '</div>' +
+      '</div>';
+
+      // 4. Homepage — button to open in new tab
+      const homepageHtml = generateHomepageHtml(card, parsed);
+      const blob = new Blob([homepageHtml], { type: 'text/html' });
+      const blobUrl = URL.createObjectURL(blob);
+
+      html += '<div class="build-section">' +
+        '<div class="build-section-label">Homepage Mockup</div>' +
+        '<div class="build-section-content">' +
+          '<div style="font-size:15px;color:#a8a49c;margin-bottom:16px;">A full desktop homepage built from this position — real copy, real colors, real type direction.</div>' +
+          '<a href="' + blobUrl + '" target="_blank" class="btn-homepage">Open Homepage in New Tab →</a>' +
+        '</div>' +
+      '</div>';
+
+      html += '</div>'; // close build-sections
+      outputEl.innerHTML = html;
+
+      // Replace placeholder
+      buildStack.replaceChild(outputEl, placeholder);
+      outputEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+    } catch(err) {
+      placeholder.innerHTML = '<div class="build-status" style="color:#d87060;">Error building position: ' + err.message + '</div>';
+    }
+
+    btn.disabled = false;
+    btn.classList.remove('building');
+    btn.textContent = 'Build This Position';
+  }
+
+  function generateHomepageHtml(card, data) {
+    const v = data.visual;
+    const h = data.homepage;
+    const voice = data.voice;
+
+    // Pick primary colors from palette
+    const bg = v.palette.find(function(p){ return p.role.toLowerCase().includes('background'); }) || v.palette[3] || v.palette[0];
+    const primary = v.palette.find(function(p){ return p.role.toLowerCase().includes('primary'); }) || v.palette[0];
+    const accent = v.palette.find(function(p){ return p.role.toLowerCase().includes('accent'); }) || v.palette[2];
+    const textColor = v.palette.find(function(p){ return p.role.toLowerCase().includes('text'); }) || v.palette[4] || v.palette[1];
+    const secondary = v.palette.find(function(p){ return p.role.toLowerCase().includes('secondary'); }) || v.palette[1];
+
+    const displayFont = v.fonts[0] ? v.fonts[0].display : 'Georgia';
+    const bodyFont = v.fonts[0] ? v.fonts[0].body : 'Georgia';
+    const googleFontsUrl = 'https://fonts.googleapis.com/css2?family=' +
+      encodeURIComponent(displayFont).replace(/%20/g, '+') + ':wght@400;700&family=' +
+      encodeURIComponent(bodyFont).replace(/%20/g, '+') + ':wght@400;500&display=swap';
+
+    const sections = h.sections || [];
+
+    return `<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>${card.title} — Homepage Concept</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="${googleFontsUrl}" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: ${bg.hex};
+    --primary: ${primary.hex};
+    --accent: ${accent.hex};
+    --text: ${textColor.hex};
+    --secondary: ${secondary.hex};
+    --font-display: '${displayFont}', Georgia, serif;
+    --font-body: '${bodyFont}', Georgia, serif;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 18px;
+    line-height: 1.7;
+    min-width: 1024px;
+  }
+
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 80px;
+    border-bottom: 1px solid rgba(128,128,128,0.15);
+  }
+
+  .nav-brand {
+    font-family: var(--font-display);
+    font-size: 20px;
+    color: var(--text);
+    letter-spacing: 0.05em;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 40px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 14px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text);
+    text-decoration: none;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+  }
+
+  .nav-links a:hover { opacity: 1; }
+
+  /* HERO */
+  .hero {
+    padding: 120px 80px 100px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .hero-tag {
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 32px;
+  }
+
+  .hero h1 {
+    font-family: var(--font-display);
+    font-size: clamp(48px, 6vw, 80px);
+    line-height: 1.1;
+    color: var(--text);
+    max-width: 800px;
+    margin-bottom: 32px;
+    font-weight: 700;
+  }
+
+  .hero-sub {
+    font-size: 20px;
+    line-height: 1.6;
+    color: var(--text);
+    opacity: 0.65;
+    max-width: 560px;
+    margin-bottom: 48px;
+  }
+
+  .btn-cta {
+    display: inline-block;
+    background: var(--accent);
+    color: var(--bg);
+    font-family: var(--font-body);
+    font-size: 14px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 18px 40px;
+    text-decoration: none;
+    border-radius: 2px;
+    transition: opacity 0.2s;
+  }
+
+  .btn-cta:hover { opacity: 0.85; }
+
+  /* SECTIONS */
+  .section {
+    padding: 100px 80px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section-alt {
+    background: var(--primary);
+    max-width: none;
+    padding: 100px 80px;
+  }
+
+  .section-alt-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .section h2 {
+    font-family: var(--font-display);
+    font-size: clamp(32px, 4vw, 52px);
+    color: var(--text);
+    margin-bottom: 24px;
+    line-height: 1.15;
+    font-weight: 700;
+    max-width: 640px;
+  }
+
+  .section-alt h2 { color: var(--bg); }
+  .section-alt p { color: var(--bg); opacity: 0.8; }
+
+  .section p {
+    font-size: 18px;
+    line-height: 1.75;
+    color: var(--text);
+    opacity: 0.7;
+    max-width: 600px;
+  }
+
+  /* DIVIDER */
+  .section-divider {
+    border: none;
+    border-top: 1px solid rgba(128,128,128,0.15);
+    margin: 0 80px;
+  }
+
+  /* CTA SECTION */
+  .section-cta {
+    padding: 120px 80px;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .section-cta h2 {
+    font-family: var(--font-display);
+    font-size: clamp(36px, 4vw, 56px);
+    color: var(--text);
+    margin-bottom: 20px;
+    font-weight: 700;
+  }
+
+  .section-cta p {
+    font-size: 18px;
+    color: var(--text);
+    opacity: 0.6;
+    max-width: 480px;
+    margin: 0 auto 40px;
+    line-height: 1.7;
+  }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid rgba(128,128,128,0.15);
+    padding: 40px 80px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  footer span {
+    font-size: 13px;
+    color: var(--text);
+    opacity: 0.35;
+    letter-spacing: 0.05em;
+  }
+
+  /* CONCEPT BADGE */
+  .concept-badge {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: var(--accent);
+    color: var(--bg);
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 8px 16px;
+    border-radius: 2px;
+    opacity: 0.9;
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-brand">${card.title}</div>
+  <ul class="nav-links">
+    <li><a href="#">Services</a></li>
+    <li><a href="#">About</a></li>
+    <li><a href="#">Work</a></li>
+    <li><a href="#">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <div class="hero-tag">${card.tag || 'Brand Concept'}</div>
+  <h1>${h.hero.headline}</h1>
+  <p class="hero-sub">${h.hero.subhead}</p>
+  <a href="#" class="btn-cta">${h.hero.cta}</a>
+</div>
+
+<hr class="section-divider">
+
+${sections.map(function(s, idx) {
+  if (s.type === 'cta') {
+    return '<div class="section-cta"><h2>' + s.heading + '</h2><p>' + s.body + '</p><a href="#" class="btn-cta">' + (s.button || 'Get Started') + '</a></div>';
+  } else if (idx % 2 === 1) {
+    return '<div class="section-alt"><div class="section-alt-inner"><h2>' + s.heading + '</h2><p>' + s.body + '</p></div></div>';
+  } else {
+    return '<hr class="section-divider"><div class="section"><h2>' + s.heading + '</h2><p>' + s.body + '</p></div>';
+  }
+}).join('\n')}
+
+<footer>
+  <span>${card.title} — Brand Concept</span>
+  <span>${voice.tagline}</span>
+</footer>
+
+<div class="concept-badge">Concept</div>
+
+</body>
+</html>`;
+  }
+
     const apiKey = document.getElementById('apiKey').value.trim();
     const clientReviews = document.getElementById('clientReviews').value.trim();
     const competitorReviews = document.getElementById('competitorReviews').value.trim();
