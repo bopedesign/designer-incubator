@@ -462,26 +462,6 @@
     letter-spacing: 0.05em;
   }
 
-  /* HOMEPAGE LAUNCH */
-  .btn-homepage {
-    display: inline-block;
-    margin-top: 16px;
-    background: #e8e4dc;
-    color: #0f0f0f;
-    border: none;
-    font-family: 'Georgia', serif;
-    font-size: 13px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    padding: 12px 24px;
-    cursor: pointer;
-    border-radius: 2px;
-    transition: background 0.2s;
-    text-decoration: none;
-  }
-
-  .btn-homepage:hover { background: #ffffff; }
-
   .build-status {
     font-size: 14px;
     color: #a8a49c;
@@ -768,56 +748,7 @@
 
     const briefContext = document.getElementById('briefText').value.trim() || (extractedPdfText || '');
 
-    const systemPrompt = `You are a senior brand strategist and creative director. Given a brand hypothesis and brief context, generate a complete brand build-out with four sections.
-
-Return ONLY valid JSON, no markdown, no preamble:
-{
-  "voice": {
-    "headline": "A punchy homepage headline (8-12 words max)",
-    "tagline": "A short brand tagline (5-7 words)",
-    "about": "A 3-4 sentence About section written in the brand voice"
-  },
-  "visual": {
-    "palette": [
-      { "name": "Color name", "hex": "#xxxxxx", "role": "Primary / Secondary / Accent / Background / Text" },
-      { "name": "Color name", "hex": "#xxxxxx", "role": "..." },
-      { "name": "Color name", "hex": "#xxxxxx", "role": "..." },
-      { "name": "Color name", "hex": "#xxxxxx", "role": "..." },
-      { "name": "Color name", "hex": "#xxxxxx", "role": "..." }
-    ],
-    "fonts": [
-      {
-        "pairing": "Pairing name (e.g. 'Editorial Authority')",
-        "display": "Display font name (a real Google Font)",
-        "body": "Body font name (a real Google Font)",
-        "displaySample": "A sample headline in the display font voice",
-        "bodySample": "A sample sentence in the body font voice"
-      },
-      {
-        "pairing": "Pairing name",
-        "display": "Display font name",
-        "body": "Body font name",
-        "displaySample": "A sample headline",
-        "bodySample": "A sample sentence"
-      }
-    ],
-    "toneWords": ["word1", "word2", "word3", "word4", "word5"],
-    "avoid": "One sentence describing what this brand should visually and tonally avoid."
-  },
-  "elevator": "A 30-second elevator pitch for this brand position, written as if spoken aloud.",
-  "homepage": {
-    "hero": {
-      "headline": "Hero headline",
-      "subhead": "Supporting hero subheadline (1-2 sentences)",
-      "cta": "CTA button text"
-    },
-    "sections": [
-      { "type": "proof", "heading": "Section heading", "body": "2-3 sentences of supporting copy" },
-      { "type": "differentiator", "heading": "Section heading", "body": "2-3 sentences of supporting copy" },
-      { "type": "cta", "heading": "Final CTA heading", "body": "1-2 sentences", "button": "Button text" }
-    ]
-  }
-}`;
+    const systemPrompt = 'You are a senior brand strategist and creative director. Given a brand hypothesis and brief context, generate a complete brand build-out.\n\nReturn ONLY valid JSON, no markdown, no preamble:\n{\n  "voice": {\n    "headline": "A punchy homepage headline (8-12 words max)",\n    "tagline": "A short brand tagline (5-7 words)",\n    "about": "A 3-4 sentence About section written in the brand voice"\n  },\n  "visual": {\n    "palette": [\n      { "name": "Color name", "hex": "#xxxxxx", "role": "Primary / Secondary / Accent / Background / Text" },\n      { "name": "Color name", "hex": "#xxxxxx", "role": "..." },\n      { "name": "Color name", "hex": "#xxxxxx", "role": "..." },\n      { "name": "Color name", "hex": "#xxxxxx", "role": "..." },\n      { "name": "Color name", "hex": "#xxxxxx", "role": "..." }\n    ],\n    "fonts": [\n      {\n        "pairing": "Pairing name (e.g. \'Editorial Authority\')",\n        "display": "Display font name (a real Google Font)",\n        "body": "Body font name (a real Google Font)",\n        "displaySample": "A sample headline in the display font voice",\n        "bodySample": "A sample sentence in the body font voice"\n      },\n      {\n        "pairing": "Pairing name",\n        "display": "Display font name",\n        "body": "Body font name",\n        "displaySample": "A sample headline",\n        "bodySample": "A sample sentence"\n      }\n    ],\n    "toneWords": ["word1", "word2", "word3", "word4", "word5"],\n    "avoid": "One sentence describing what this brand should visually and tonally avoid."\n  },\n  "elevator": "A 30-second elevator pitch for this brand position, written as if spoken aloud.",\n  "mobbinPrompt": "A detailed prompt for searching Mobbin for relevant design inspiration. Write it as a direct instruction to Claude Desktop with Mobbin connected. Include: the brand position and tone, the specific UI screens and flows to search for (e.g. onboarding, hero sections, navigation, pricing pages), the visual mood and aesthetic direction, the color and typography personality, and what to look for in terms of layout and interaction patterns. Be specific enough that the Mobbin search returns genuinely relevant results for this brand position. Write it as 3-4 paragraphs of clear instruction, not a list."\n}';
 
     const userMessage = 'Brand hypothesis:\nTitle: ' + card.title + '\nTag: ' + (card.tag || '') + '\nHypothesis: ' + card.hypothesis + '\nWhy: ' + card.why + '\n\nBrief context:\n' + (briefContext || 'Not provided') + '\n\nGenerate the full brand build-out.';
 
@@ -904,16 +835,13 @@ Return ONLY valid JSON, no markdown, no preamble:
         '<div class="build-section-content" style="font-style:italic;">' + parsed.elevator + '</div>' +
       '</div>';
 
-      // 4. Homepage — button to open in new tab
-      const homepageHtml = generateHomepageHtml(card, parsed);
-      const blob = new Blob([homepageHtml], { type: 'text/html' });
-      const blobUrl = URL.createObjectURL(blob);
-
+      // 4. Mobbin Prompt
       html += '<div class="build-section">' +
-        '<div class="build-section-label">Homepage Mockup</div>' +
+        '<div class="build-section-label">Mobbin Search Prompt</div>' +
         '<div class="build-section-content">' +
-          '<div style="font-size:15px;color:#a8a49c;margin-bottom:16px;">A full desktop homepage built from this position — real copy, real colors, real type direction.</div>' +
-          '<a href="' + blobUrl + '" target="_blank" class="btn-homepage">Open Homepage in New Tab →</a>' +
+          '<div style="font-size:14px;color:#a8a49c;margin-bottom:16px;">Copy this prompt and give it to Claude Desktop with your Mobbin tool connected.</div>' +
+          '<div id="mobbinPrompt' + cardIndex + '" style="font-size:15px;line-height:1.8;color:#c8c4bc;background:#0f0f0f;border:1px solid #2a2a2a;border-radius:2px;padding:20px;white-space:pre-wrap;">' + parsed.mobbinPrompt + '</div>' +
+          '<button onclick="(function(){ var t = document.getElementById(\'mobbinPrompt' + cardIndex + '\').textContent; navigator.clipboard.writeText(t); this.textContent=\'Copied\'; var b=this; setTimeout(function(){b.textContent=\'Copy Prompt\';},2000); }).call(this)" style="margin-top:12px;background:transparent;color:#c8c4bc;border:1px solid #3a3a3a;font-family:\'Georgia\',serif;font-size:13px;letter-spacing:0.12em;text-transform:uppercase;padding:10px 20px;cursor:pointer;border-radius:2px;">Copy Prompt</button>' +
         '</div>' +
       '</div>';
 
@@ -931,93 +859,6 @@ Return ONLY valid JSON, no markdown, no preamble:
     btn.disabled = false;
     btn.classList.remove('building');
     btn.textContent = 'Build This Position';
-  }
-
-  function generateHomepageHtml(card, data) {
-    var v = data.visual;
-    var h = data.homepage;
-    var voice = data.voice;
-
-    var bg = v.palette.find(function(p){ return p.role.toLowerCase().includes('background'); }) || v.palette[3] || v.palette[0];
-    var primary = v.palette.find(function(p){ return p.role.toLowerCase().includes('primary'); }) || v.palette[0];
-    var accent = v.palette.find(function(p){ return p.role.toLowerCase().includes('accent'); }) || v.palette[2];
-    var textColor = v.palette.find(function(p){ return p.role.toLowerCase().includes('text'); }) || v.palette[4] || v.palette[1];
-
-    var displayFont = v.fonts[0] ? v.fonts[0].display : 'Georgia';
-    var bodyFont = v.fonts[0] ? v.fonts[0].body : 'Georgia';
-    var googleFontsUrl = 'https://fonts.googleapis.com/css2?family=' +
-      encodeURIComponent(displayFont).replace(/%20/g, '+') + ':wght@400;700&family=' +
-      encodeURIComponent(bodyFont).replace(/%20/g, '+') + ':wght@400;500&display=swap';
-
-    var sections = h.sections || [];
-
-    var sectionsHtml = sections.map(function(s, idx) {
-      if (s.type === 'cta') {
-        return '<div class="section-cta"><h2>' + s.heading + '</h2><p>' + s.body + '</p><a href="#" class="btn-cta">' + (s.button || 'Get Started') + '</a></div>';
-      } else if (idx % 2 === 1) {
-        return '<div class="section-alt"><div class="section-alt-inner"><h2>' + s.heading + '</h2><p>' + s.body + '</p></div></div>';
-      } else {
-        return '<hr class="section-divider"><div class="section"><h2>' + s.heading + '</h2><p>' + s.body + '</p></div>';
-      }
-    }).join('\n');
-
-    var out = '';
-    out += '<!DOCTYPE html>';
-    out += '<html lang="en"><head>';
-    out += '<meta charset="UTF-8">';
-    out += '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
-    out += '<title>' + card.title + ' \u2014 Homepage Concept</title>';
-    out += '<link rel="preconnect" href="https://fonts.googleapis.com">';
-    out += '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>';
-    out += '<link href="' + googleFontsUrl + '" rel="stylesheet">';
-    out += '<style>';
-    out += '*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }';
-    out += ':root {';
-    out += '--bg: ' + bg.hex + ';';
-    out += '--primary: ' + primary.hex + ';';
-    out += '--accent: ' + accent.hex + ';';
-    out += '--text: ' + textColor.hex + ';';
-    out += "--font-display: '" + displayFont + "', Georgia, serif;";
-    out += "--font-body: '" + bodyFont + "', Georgia, serif;";
-    out += '}';
-    out += 'body { background: var(--bg); color: var(--text); font-family: var(--font-body); font-size: 18px; line-height: 1.7; min-width: 1024px; }';
-    out += 'nav { display: flex; justify-content: space-between; align-items: center; padding: 24px 80px; border-bottom: 1px solid rgba(128,128,128,0.15); }';
-    out += '.nav-brand { font-family: var(--font-display); font-size: 20px; color: var(--text); letter-spacing: 0.05em; }';
-    out += '.nav-links { display: flex; gap: 40px; list-style: none; }';
-    out += '.nav-links a { font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text); text-decoration: none; opacity: 0.6; }';
-    out += '.hero { padding: 120px 80px 100px; max-width: 1200px; margin: 0 auto; }';
-    out += '.hero-tag { font-size: 12px; letter-spacing: 0.25em; text-transform: uppercase; color: var(--accent); margin-bottom: 32px; }';
-    out += '.hero h1 { font-family: var(--font-display); font-size: clamp(48px,6vw,80px); line-height: 1.1; color: var(--text); max-width: 800px; margin-bottom: 32px; font-weight: 700; }';
-    out += '.hero-sub { font-size: 20px; line-height: 1.6; color: var(--text); opacity: 0.65; max-width: 560px; margin-bottom: 48px; }';
-    out += '.btn-cta { display: inline-block; background: var(--accent); color: var(--bg); font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; padding: 18px 40px; text-decoration: none; border-radius: 2px; }';
-    out += '.section { padding: 100px 80px; max-width: 1200px; margin: 0 auto; }';
-    out += '.section-alt { background: var(--primary); padding: 100px 80px; }';
-    out += '.section-alt-inner { max-width: 1200px; margin: 0 auto; }';
-    out += '.section h2 { font-family: var(--font-display); font-size: clamp(32px,4vw,52px); color: var(--text); margin-bottom: 24px; line-height: 1.15; font-weight: 700; max-width: 640px; }';
-    out += '.section-alt h2 { color: var(--bg); } .section-alt p { color: var(--bg); opacity: 0.8; }';
-    out += '.section p { font-size: 18px; line-height: 1.75; color: var(--text); opacity: 0.7; max-width: 600px; }';
-    out += '.section-divider { border: none; border-top: 1px solid rgba(128,128,128,0.15); margin: 0 80px; }';
-    out += '.section-cta { padding: 120px 80px; max-width: 1200px; margin: 0 auto; text-align: center; }';
-    out += '.section-cta h2 { font-family: var(--font-display); font-size: clamp(36px,4vw,56px); color: var(--text); margin-bottom: 20px; font-weight: 700; }';
-    out += '.section-cta p { font-size: 18px; color: var(--text); opacity: 0.6; max-width: 480px; margin: 0 auto 40px; line-height: 1.7; }';
-    out += 'footer { border-top: 1px solid rgba(128,128,128,0.15); padding: 40px 80px; display: flex; justify-content: space-between; align-items: center; }';
-    out += 'footer span { font-size: 13px; color: var(--text); opacity: 0.35; letter-spacing: 0.05em; }';
-    out += '.concept-badge { position: fixed; bottom: 24px; right: 24px; background: var(--accent); color: var(--bg); font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; padding: 8px 16px; border-radius: 2px; opacity: 0.9; }';
-    out += '</style></head><body>';
-    out += '<nav><div class="nav-brand">' + card.title + '</div>';
-    out += '<ul class="nav-links"><li><a href="#">Services</a></li><li><a href="#">About</a></li><li><a href="#">Work</a></li><li><a href="#">Contact</a></li></ul></nav>';
-    out += '<div class="hero">';
-    out += '<div class="hero-tag">' + (card.tag || 'Brand Concept') + '</div>';
-    out += '<h1>' + h.hero.headline + '</h1>';
-    out += '<p class="hero-sub">' + h.hero.subhead + '</p>';
-    out += '<a href="#" class="btn-cta">' + h.hero.cta + '</a>';
-    out += '</div>';
-    out += '<hr class="section-divider">';
-    out += sectionsHtml;
-    out += '<footer><span>' + card.title + ' \u2014 Brand Concept</span><span>' + voice.tagline + '</span></footer>';
-    out += '<div class="concept-badge">Concept</div>';
-    out += '</body></html>';
-    return out;
   }
 
   async function rankHypotheses() {
